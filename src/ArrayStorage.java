@@ -2,12 +2,12 @@
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10];
+    Resume[] storage = new Resume[10000];
     int lastPosition = 0;
 
     void clear() {
-        for (int i = 0; storage[i] != null; i++) {
-            storage[i].setUuid(null);
+        for (int i = 0; i < lastPosition; i++) {
+            storage[i] = null;
         }
         lastPosition = 0;
     }
@@ -18,15 +18,16 @@ public class ArrayStorage {
     }
 
     Resume get(String uuid) {
-        for (int i = 0; storage[i] != null; i++)
+        for (int i = 0; i < lastPosition; i++) {
             if (storage[i].toString() == uuid) {
                 return storage[i];
             }
+        }
         return null;
     }
 
     void delete(String uuid) {
-        for (int i = 0; storage[i] != null; i++) {
+        for (int i = 0; i < lastPosition; i++) {
             if (storage[i].toString() == uuid) {
                 storage[i] = storage[lastPosition - 1];
                 storage[lastPosition - 1] = null;
@@ -40,7 +41,11 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        return storage;
+        Resume[] getStorage = new Resume[lastPosition];
+        for (int i = 0; i < lastPosition; i++) {
+            getStorage[i] = storage[i];
+        }
+        return getStorage;
     }
 
     int size() {

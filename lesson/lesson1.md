@@ -104,7 +104,7 @@ r1, r2, r3,..., rn, null, null,..., null
 1. Не добавляйте в `Resume` новые поля
 1. Resume r — давайте переменным осмысленные имена, например resume. r допустимо в коротких циклах и лямбда-выражениях
 
-## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png)  5. [Вебинар "Быть программистом: от детства к зрелости"](https://www.youtube.com/watch?v=D5Hej0TyLaU)
+## ![video]basejava)  5. [Вебинар "Быть программистом: от детства к зрелости"](https://www.youtube.com/watch?v=D5Hej0TyLaU)
   - [Слайды вебинара](https://docs.google.com/presentation/d/1YwtCCZsaGMdl-V15kTDHiJxiS52IAl-qqheNPpiNr54/)
 ### Советы по обучению  
   - Учитесь грамотно формулировать проблему: "у меня не работает" может иметь тысячи причин. В процессе формулирования часто приходит ее решение
