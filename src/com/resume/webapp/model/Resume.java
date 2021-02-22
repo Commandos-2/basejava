@@ -1,3 +1,5 @@
+package com.resume.webapp.model;
+
 /**
  * Initial resume class
  */
