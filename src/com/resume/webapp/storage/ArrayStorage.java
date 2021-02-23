@@ -2,63 +2,56 @@ package com.resume.webapp.storage;
 
 import com.resume.webapp.model.Resume;
 
+import java.util.Arrays;
+
 /**
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
-    int lastPosition = 0;
+    private Resume[] storage = new Resume[10_000];
+    private int lastPosition = 0;
 
     public void clear() {
-        for (int i = 0; i < lastPosition; i++) {
-            storage[i] = null;
-        }
+        Arrays.fill(storage, 0, lastPosition, null);
         lastPosition = 0;
     }
 
-    public void update(Resume r) {
-        for (int i = 0; i < lastPosition; i++) {
-            if (storage[i].toString() == r.toString()) {
-                storage[i] = r;
-                return;
-            }
+    public void update(Resume resume) {
+        if (checkExistence(resume) != -1) {
+            storage[checkExistence(resume)] = resume;
+            return;
         }
-        System.out.println("Ошибка. Заданное резюме отсутствует.");
+
+        System.out.println("Ошибка. Заданное резюме -" + resume.toString() + "- отсутствует.");
     }
 
-    public void save(Resume r) {
-        for (int i = 0; i < lastPosition; i++) {
-            if (storage[i].toString() == r.toString()) {
-                System.out.println("Ошибка. Данное резюме уже существует.");
-                return;
-            }
+    public void save(Resume resume) {
+        if (checkExistence(resume) != -1) {
+            System.out.println("Ошибка. Данное резюме -" + resume.toString() + "- уже существует.");
+            return;
         }
         if (lastPosition < storage.length) {
-            storage[lastPosition] = r;
+            storage[lastPosition] = resume;
             lastPosition++;
         } else {
-            System.out.println("Ошибка. Хранилище переполнено.");
+            System.out.println("Ошибка. Хранилище переполнено. " + resume.toString() + "- не сохранено");
         }
     }
 
     public Resume get(String uuid) {
-        for (int i = 0; i < lastPosition; i++) {
-            if (storage[i].toString() == uuid) {
-                return storage[i];
-            }
+        if (checkExistence(uuid) != -1) {
+            return storage[checkExistence(uuid)];
         }
-        System.out.println("Ошибка. Заданное резюме отсутствует.");
+        System.out.println("Ошибка. Заданное резюме -" + uuid + "- отсутствует.");
         return null;
     }
 
     public void delete(String uuid) {
-        for (int i = 0; i < lastPosition; i++) {
-            if (storage[i].toString() == uuid) {
-                storage[i] = storage[lastPosition - 1];
-                storage[lastPosition - 1] = null;
-                lastPosition--;
-                return;
-            }
+        if (checkExistence(uuid) != -1) {
+            storage[checkExistence(uuid)] = storage[lastPosition - 1];
+            storage[lastPosition - 1] = null;
+            lastPosition--;
+            return;
         }
         System.out.println("Ошибка. Заданное резюме отсутствует.");
     }
@@ -68,13 +61,29 @@ public class ArrayStorage {
      */
     public Resume[] getAll() {
         Resume[] getStorage = new Resume[lastPosition];
-        for (int i = 0; i < lastPosition; i++) {
-            getStorage[i] = storage[i];
-        }
+        getStorage = Arrays.copyOfRange(storage, 0, lastPosition);
         return getStorage;
     }
 
     public int size() {
         return lastPosition;
+    }
+
+    public int checkExistence(Resume resume) { // функция проверки наличия указанного резюме в базе (при наличи возвращает индекс в базе)
+        for (int i = 0; i < lastPosition; i++) {
+            if (storage[i].toString() == resume.toString()) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int checkExistence(String uuid) { // перегруженная функция проверки наличия резюме с указанным uuid в базе (при наличи возвращает индекс в базе)
+        for (int i = 0; i < lastPosition; i++) {
+            if (storage[i].toString() == uuid) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
