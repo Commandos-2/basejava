@@ -17,8 +17,9 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        if (checkExistence(resume) != -1) {
-            storage[checkExistence(resume)] = resume;
+        int pozition = checkExistence(resume.toString());
+        if (pozition != -1) {
+            storage[pozition] = resume;
             return;
         }
 
@@ -26,7 +27,7 @@ public class ArrayStorage {
     }
 
     public void save(Resume resume) {
-        if (checkExistence(resume) != -1) {
+        if (checkExistence(resume.toString()) != -1) {
             System.out.println("Ошибка. Данное резюме -" + resume.toString() + "- уже существует.");
             return;
         }
@@ -39,16 +40,18 @@ public class ArrayStorage {
     }
 
     public Resume get(String uuid) {
-        if (checkExistence(uuid) != -1) {
-            return storage[checkExistence(uuid)];
+        int pozition = checkExistence(uuid);
+        if (pozition != -1) {
+            return storage[pozition];
         }
         System.out.println("Ошибка. Заданное резюме -" + uuid + "- отсутствует.");
         return null;
     }
 
     public void delete(String uuid) {
-        if (checkExistence(uuid) != -1) {
-            storage[checkExistence(uuid)] = storage[lastPosition - 1];
+        int pozition = checkExistence(uuid);
+        if (pozition != -1) {
+            storage[pozition] = storage[lastPosition - 1];
             storage[lastPosition - 1] = null;
             lastPosition--;
             return;
@@ -60,25 +63,14 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     public Resume[] getAll() {
-        Resume[] getStorage = new Resume[lastPosition];
-        getStorage = Arrays.copyOfRange(storage, 0, lastPosition);
-        return getStorage;
+        return Arrays.copyOfRange(storage, 0, lastPosition);
     }
 
     public int size() {
         return lastPosition;
     }
 
-    public int checkExistence(Resume resume) { // функция проверки наличия указанного резюме в базе (при наличи возвращает индекс в базе)
-        for (int i = 0; i < lastPosition; i++) {
-            if (storage[i].toString() == resume.toString()) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    public int checkExistence(String uuid) { // перегруженная функция проверки наличия резюме с указанным uuid в базе (при наличи возвращает индекс в базе)
+    private int checkExistence(String uuid) { // перегруженная функция проверки наличия резюме с указанным uuid в базе (при наличи возвращает индекс в базе)
         for (int i = 0; i < lastPosition; i++) {
             if (storage[i].toString() == uuid) {
                 return i;
