@@ -17,62 +17,63 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        int pozition = checkExistence(resume.toString());
-        if (pozition != -1) {
-            storage[pozition] = resume;
+        int index = findIndex(resume.getUuid());
+        if (index != -1) {
+            storage[index] = resume;
             return;
         }
 
-        System.out.println("Ошибка. Заданное резюме -" + resume.toString() + "- отсутствует.");
+        System.out.println("Ошибка. Заданное резюме - " + resume.getUuid() + " - отсутствует.");
     }
 
     public void save(Resume resume) {
-        if (checkExistence(resume.toString()) != -1) {
-            System.out.println("Ошибка. Данное резюме -" + resume.toString() + "- уже существует.");
+        if (findIndex(resume.getUuid()) != -1) {
+            System.out.println("Ошибка. Данное резюме - " + resume.getUuid() + " - уже существует.");
             return;
         }
         if (lastPosition < storage.length) {
             storage[lastPosition] = resume;
             lastPosition++;
         } else {
-            System.out.println("Ошибка. Хранилище переполнено. " + resume.toString() + "- не сохранено");
+            System.out.println("Ошибка. Хранилище переполнено. " + resume.getUuid() + "- не сохранено");
         }
     }
 
     public Resume get(String uuid) {
-        int pozition = checkExistence(uuid);
-        if (pozition != -1) {
-            return storage[pozition];
+        int index = findIndex(uuid);
+        if (index != -1) {
+            return storage[index];
         }
-        System.out.println("Ошибка. Заданное резюме -" + uuid + "- отсутствует.");
+        System.out.println("Ошибка. Заданное резюме - " + uuid + " - отсутствует.");
         return null;
     }
 
     public void delete(String uuid) {
-        int pozition = checkExistence(uuid);
-        if (pozition != -1) {
-            storage[pozition] = storage[lastPosition - 1];
+        int index = findIndex(uuid);
+        if (index != -1) {
+            storage[index] = storage[lastPosition - 1];
             storage[lastPosition - 1] = null;
             lastPosition--;
             return;
         }
-        System.out.println("Ошибка. Заданное резюме отсутствует.");
+        System.out.println("Ошибка. Заданное резюме - " + uuid + " - отсутствует.");
     }
 
     /**
      * @return array, contains only Resumes in storage (without null)
      */
     public Resume[] getAll() {
-        return Arrays.copyOfRange(storage, 0, lastPosition);
+        return Arrays.copyOf(storage, lastPosition);
     }
 
     public int size() {
         return lastPosition;
     }
 
-    private int checkExistence(String uuid) { // перегруженная функция проверки наличия резюме с указанным uuid в базе (при наличи возвращает индекс в базе)
+    // функция проверки наличия резюме с указанным uuid в базе (при наличи возвращает индекс в базе)
+    private int findIndex(String uuid) {
         for (int i = 0; i < lastPosition; i++) {
-            if (storage[i].toString() == uuid) {
+            if (storage[i].getUuid() == uuid) {
                 return i;
             }
         }
