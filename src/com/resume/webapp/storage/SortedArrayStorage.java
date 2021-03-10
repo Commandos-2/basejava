@@ -10,13 +10,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected void saveResume(Resume resume, int index) {
-        if (lastPosition == 0) {
-            storage[lastPosition] = resume;
-            return;
-        }
-       // System.out.println("index =" + index);
-        index = abs(index)-1;
-       // System.out.println("index =" + index);
+        index = abs(index) - 1;
         if (lastPosition - index > 0) System.arraycopy(storage, index, storage, index + 1, lastPosition - index);
         storage[index] = resume;
     }
