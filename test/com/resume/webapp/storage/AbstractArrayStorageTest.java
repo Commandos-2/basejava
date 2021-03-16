@@ -14,17 +14,16 @@ public abstract class AbstractArrayStorageTest {
     private static final String UUID3 = "uuid3";
     private static final String UUID23 = "uuid23";
 
-    @Before
+    public AbstractArrayStorageTest(Storage storage) {
+        this.storage = storage;
+    }
 
+    @Before
     public void setUp() throws Exception {
         storage.clear();
         storage.save(new Resume(UUID1));
         storage.save(new Resume(UUID2));
         storage.save(new Resume(UUID3));
-    }
-
-    public AbstractArrayStorageTest(Storage storage) {
-        this.storage = storage;
     }
 
     @Test
@@ -37,12 +36,12 @@ public abstract class AbstractArrayStorageTest {
     public void update() throws Exception {
         storage.update(new Resume(UUID2));
         Assert.assertEquals(3, storage.size());
-        storage.get(UUID2);
+        Assert.assertEquals(new Resume(UUID2), storage.get(UUID2));
     }
+
     @Test(expected = NotExistStorageException.class)
     public void updateNotExist() throws Exception {
         storage.update(new Resume(UUID23));
-
     }
 
     @Test
@@ -59,7 +58,7 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void get() throws Exception {
-        Assert.assertTrue(storage.get(UUID2).equals(new Resume(UUID2)));
+        Assert.assertEquals(new Resume(UUID2), storage.get(UUID2));
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -70,6 +69,7 @@ public abstract class AbstractArrayStorageTest {
     @Test(expected = NotExistStorageException.class)
     public void delete() throws Exception {
         storage.delete(UUID2);
+        Assert.assertEquals(2, storage.size());
         storage.get(UUID2);
     }
 
@@ -86,10 +86,8 @@ public abstract class AbstractArrayStorageTest {
     @Test
     public void getAll() throws Exception {
         Resume[] resumes = storage.getAll();
-        Assert.assertEquals(resumes[0], new Resume(UUID1));
-        Assert.assertEquals(resumes[1], new Resume(UUID2));
-        Assert.assertEquals(resumes[2], new Resume(UUID3));
+        Assert.assertEquals(new Resume(UUID1), resumes[0]);
+        Assert.assertEquals(new Resume(UUID2), resumes[1]);
+        Assert.assertEquals(new Resume(UUID3), resumes[2]);
     }
-
-
 }
