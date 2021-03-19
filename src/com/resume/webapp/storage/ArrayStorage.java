@@ -15,7 +15,6 @@ public class ArrayStorage extends AbstractArrayStorage {
     @Override
     protected void deleteResume(int index) {
         storage[index] = storage[lastPosition - 1];
-
     }
 
     // функция проверки наличия резюме с указанным uuid в базе (при наличи возвращает индекс в базе)
