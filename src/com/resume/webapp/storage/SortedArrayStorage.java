@@ -9,14 +9,14 @@ import static java.lang.Math.abs;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void saveResume(Resume resume, int index) {
+    protected void saveResumeArray(Resume resume, int index) {
         index = abs(index) - 1;
         if (lastPosition - index > 0) System.arraycopy(storage, index, storage, index + 1, lastPosition - index);
         storage[index] = resume;
     }
 
     @Override
-    protected void deleteResume(int index) {
+    protected void deleteResumeArray(int index) {
         if (lastPosition - 1 - index >= 0)
             System.arraycopy(storage, index + 1, storage, index, lastPosition - 1 - index);
     }

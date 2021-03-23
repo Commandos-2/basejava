@@ -4,7 +4,7 @@ import com.resume.webapp.exception.StorageException;
 import com.resume.webapp.model.Resume;
 import org.junit.Assert;
 
-public class AbstractArrayStorageTest extends AbstractStorageTest {
+public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
     public AbstractArrayStorageTest(Storage storage) {
         super(storage);
     }
@@ -12,11 +12,11 @@ public class AbstractArrayStorageTest extends AbstractStorageTest {
     @Override
     public void arraySaveOverflow(Storage storage) throws Exception {
         try {
-            for(int i=4;i<=AbstractArrayStorage.STORAGE_LIMIT;i++){
+            for (int i = 4; i <= AbstractArrayStorage.STORAGE_LIMIT; i++) {
                 storage.save(new Resume());
             }
-        }catch (StorageException e){
-            Assert.fail();
+        } catch (StorageException e) {
+            Assert.fail("Ошибка сохранения Резюме в хранилище. Отрицательный результат теста");
         }
         storage.save(new Resume());
     }
