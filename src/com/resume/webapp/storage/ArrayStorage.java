@@ -8,12 +8,12 @@ import com.resume.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void saveResumeArray(Resume resume, int index) {
+    protected void saveResumeToArray(Resume resume, int index) {
         storage[lastPosition] = resume;
     }
 
     @Override
-    protected void deleteResumeArray(int index) {
+    protected void deleteResumeFromArray(int index) {
         storage[index] = storage[lastPosition - 1];
     }
 

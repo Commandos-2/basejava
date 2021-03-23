@@ -1,7 +1,7 @@
 package com.resume.webapp;
 
 import com.resume.webapp.model.Resume;
-import com.resume.webapp.storage.ArrayStorage;
+import com.resume.webapp.storage.ListStorage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
  * (just run, no need to understand)
  */
 public class MainArray {
-    private final static ArrayStorage ARRAY_STORAGE = new ArrayStorage() {
+    private final static ListStorage ARRAY_STORAGE = new ListStorage() {
     };
 
     public static void main(String[] args) throws IOException {

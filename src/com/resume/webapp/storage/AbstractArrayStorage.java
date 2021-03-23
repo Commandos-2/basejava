@@ -5,7 +5,7 @@ import com.resume.webapp.model.Resume;
 
 import java.util.Arrays;
 
-public abstract class AbstractArrayStorage extends AbstractStorage implements Storage {
+public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int STORAGE_LIMIT = 10000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int lastPosition = 0;
@@ -24,16 +24,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage implements St
     }
 
     @Override
-    public int checkСontainsResume(Resume resume) {
-        return findIndex(resume.getUuid());
-    }
-
-    @Override
     public void saveResume(Resume resume, int index) {
         if (lastPosition >= storage.length) {
             throw new StorageException("Хранилище переполнено. Резюме не сохранено", resume.getUuid());
         }
-        saveResumeArray(resume, index);
+        saveResumeToArray(resume, index);
         lastPosition++;
     }
 
@@ -43,25 +38,20 @@ public abstract class AbstractArrayStorage extends AbstractStorage implements St
     }
 
     @Override
-    public final Resume getResume(String uuid) {
-        int index = findIndex(uuid);
-        if (index >= 0) {
-            return storage[index];
-        }
-        return null;
+    public final Resume getResume(int index) {
+        return storage[index];
     }
 
     @Override
-    public final void deleteResume(String uuid) {
-        int index = findIndex(uuid);
-        deleteResumeArray(index);
+    public final void deleteResume(int index) {
+        deleteResumeFromArray(index);
         storage[lastPosition - 1] = null;
         lastPosition--;
     }
 
-    protected abstract void saveResumeArray(Resume resume, int index);
+    protected abstract void saveResumeToArray(Resume resume, int index);
 
-    protected abstract void deleteResumeArray(int index);
+    protected abstract void deleteResumeFromArray(int index);
 
     protected abstract int findIndex(String uuid);
 }

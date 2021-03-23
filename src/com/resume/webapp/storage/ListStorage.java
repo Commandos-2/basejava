@@ -3,11 +3,10 @@ package com.resume.webapp.storage;
 import com.resume.webapp.model.Resume;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
-    private final List storage = new ArrayList<>();
+    private final List<Resume> storage = new ArrayList<>();
 
     @Override
     public void clear() {
@@ -16,21 +15,12 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     public Resume[] getAll() {
-        Resume[] catsArray = (Resume[]) storage.toArray(new Resume[0]);
-        return catsArray;
+        return (Resume[]) storage.toArray(new Resume[0]);
     }
 
     @Override
     public int size() {
         return storage.size();
-    }
-
-    @Override
-    public int checkСontainsResume(Resume resume) {
-        if (storage.contains(resume)) {
-            return 1;
-        }
-        return -1;
     }
 
     @Override
@@ -40,31 +30,26 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     public void updateResume(Resume resume, int index) {
-        storage.set(storage.indexOf(resume), resume);
+        storage.set(index, resume);
     }
 
     @Override
-    public Resume getResume(String uuid) {
-        Resume resume;
+    public Resume getResume(int index) {
+        return storage.get(index);
+    }
+
+    @Override
+    public void deleteResume(int index) {
+        storage.remove(index);
+    }
+
+    @Override
+    protected int findIndex(String uuid) {
         for (int i = 0; i < storage.size(); i++) {
-            resume = (Resume) storage.get(i);
-            if (resume.getUuid() == uuid) {
-                return resume;
+            if (((Resume) storage.get(i)).getUuid() == uuid) {
+                return i;
             }
         }
-        return null;
-    }
-
-    @Override
-    public void deleteResume(String uuid) {
-        Iterator iterator = storage.iterator();
-        Resume resume;
-        while (iterator.hasNext()) {
-            resume = (Resume) iterator.next();
-            if (resume.getUuid() == uuid) {
-                iterator.remove();
-                return;
-            }
-        }
+        return -1;
     }
 }
