@@ -11,10 +11,10 @@ import org.junit.Test;
 
 public abstract class AbstractStorageTest {
     private Storage storage;
-    private static final String UUID1 = "uuid1";
-    private static final String UUID2 = "uuid2";
-    private static final String UUID3 = "uuid3";
-    private static final String UUID23 = "uuid23";
+    protected static final String UUID1 = "uuid1";
+    protected static final String UUID2 = "uuid2";
+    protected static final String UUID3 = "uuid3";
+    protected static final String UUID23 = "uuid23";
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -93,10 +93,11 @@ public abstract class AbstractStorageTest {
     @Test
     public void getAll() throws Exception {
         Resume[] resumes = storage.getAll();
-        Assert.assertEquals(new Resume(UUID1), resumes[0]);
-        Assert.assertEquals(new Resume(UUID2), resumes[1]);
-        Assert.assertEquals(new Resume(UUID3), resumes[2]);
+        getAllTest(resumes);
+        Assert.assertEquals(3, resumes.length);
     }
 
     public abstract void arraySaveOverflow(Storage storage) throws Exception;
+
+    public abstract void getAllTest(Resume[] resumes) throws Exception;
 }

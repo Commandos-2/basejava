@@ -4,9 +4,11 @@ import com.resume.webapp.exception.StorageException;
 import com.resume.webapp.model.Resume;
 import org.junit.Assert;
 
-public class ListStorageTest extends AbstractArrayStorageTest {
-    public ListStorageTest() {
-        super(new ListStorage());
+import static java.util.Arrays.sort;
+
+public class MapStorageTest extends AbstractStorageTest {
+    public MapStorageTest() {
+        super(new MapStorage());
     }
 
     @Override
@@ -16,6 +18,7 @@ public class ListStorageTest extends AbstractArrayStorageTest {
 
     @Override
     public void getAllTest(Resume[] resumes) throws Exception {
+        sort(resumes);
         Assert.assertEquals(new Resume(UUID1), resumes[0]);
         Assert.assertEquals(new Resume(UUID2), resumes[1]);
         Assert.assertEquals(new Resume(UUID3), resumes[2]);

@@ -24,7 +24,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public void saveResume(Resume resume, int index) {
+    protected void saveResume(Resume resume, int index) {
         if (lastPosition >= storage.length) {
             throw new StorageException("Хранилище переполнено. Резюме не сохранено", resume.getUuid());
         }
@@ -33,17 +33,17 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public final void updateResume(Resume resume, int index) {
+    protected final void updateResume(Resume resume, int index) {
         storage[index] = resume;
     }
 
     @Override
-    public final Resume getResume(int index) {
+    protected final Resume getResume(int index,String uuid) {
         return storage[index];
     }
 
     @Override
-    public final void deleteResume(int index) {
+    protected final void deleteResume(int index,String uuid) {
         deleteResumeFromArray(index);
         storage[lastPosition - 1] = null;
         lastPosition--;

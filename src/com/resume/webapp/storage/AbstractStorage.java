@@ -19,24 +19,24 @@ public abstract class AbstractStorage implements Storage {
     }
 
     public final Resume get(String uuid) {
-        return getResume(checkNotExistStorageException(uuid));
+        return getResume(checkNotExistStorageException(uuid),uuid);
     }
 
     public final void delete(String uuid) {
-        deleteResume(checkNotExistStorageException(uuid));
+        deleteResume(checkNotExistStorageException(uuid),uuid);
     }
 
-    public abstract void saveResume(Resume resume, int index);
+    protected abstract void saveResume(Resume resume, int index);
 
-    public abstract void updateResume(Resume resume, int index);
+    protected abstract void updateResume(Resume resume, int index);
 
-    public abstract Resume getResume(int index);
+    protected abstract Resume getResume(int index,String uuid);
 
-    public abstract void deleteResume(int index);
+    protected abstract void deleteResume(int index, String uuid);
 
     protected abstract int findIndex(String uuid);
 
-    private final int checkNotExistStorageException(String uuid) {
+    private int checkNotExistStorageException(String uuid) {
         int index = findIndex(uuid);
         if (index < 0) {
             throw new NotExistStorageException(uuid);
