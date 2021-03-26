@@ -20,11 +20,4 @@ public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
         }
         storage.save(new Resume());
     }
-
-    @Override
-    public void getAllTest(Resume[] resumes) throws Exception {
-        Assert.assertEquals(new Resume(UUID1), resumes[0]);
-        Assert.assertEquals(new Resume(UUID2), resumes[1]);
-        Assert.assertEquals(new Resume(UUID3), resumes[2]);
-    }
 }

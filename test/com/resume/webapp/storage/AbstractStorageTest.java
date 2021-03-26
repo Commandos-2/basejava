@@ -93,11 +93,11 @@ public abstract class AbstractStorageTest {
     @Test
     public void getAll() throws Exception {
         Resume[] resumes = storage.getAll();
-        getAllTest(resumes);
+        Assert.assertEquals(new Resume(UUID1), resumes[0]);
+        Assert.assertEquals(new Resume(UUID2), resumes[1]);
+        Assert.assertEquals(new Resume(UUID3), resumes[2]);
         Assert.assertEquals(3, resumes.length);
     }
 
     public abstract void arraySaveOverflow(Storage storage) throws Exception;
-
-    public abstract void getAllTest(Resume[] resumes) throws Exception;
 }
