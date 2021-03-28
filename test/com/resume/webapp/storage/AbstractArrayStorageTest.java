@@ -3,14 +3,15 @@ package com.resume.webapp.storage;
 import com.resume.webapp.exception.StorageException;
 import com.resume.webapp.model.Resume;
 import org.junit.Assert;
+import org.junit.Test;
 
 public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
     public AbstractArrayStorageTest(Storage storage) {
         super(storage);
     }
 
-    @Override
-    public void arraySaveOverflow(Storage storage) throws Exception {
+    @Test(expected = StorageException.class)
+    public void arraySaveOverflow() throws Exception {
         try {
             for (int i = 4; i <= AbstractArrayStorage.STORAGE_LIMIT; i++) {
                 storage.save(new Resume());

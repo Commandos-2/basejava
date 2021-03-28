@@ -3,14 +3,13 @@ package com.resume.webapp.storage;
 
 import com.resume.webapp.exception.ExistStorageException;
 import com.resume.webapp.exception.NotExistStorageException;
-import com.resume.webapp.exception.StorageException;
 import com.resume.webapp.model.Resume;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 public abstract class AbstractStorageTest {
-    private Storage storage;
+    protected Storage storage;
     protected static final String UUID1 = "uuid1";
     protected static final String UUID2 = "uuid2";
     protected static final String UUID3 = "uuid3";
@@ -58,11 +57,6 @@ public abstract class AbstractStorageTest {
         storage.save(new Resume(UUID2));
     }
 
-    @Test(expected = StorageException.class)
-    public void saveOverflow() throws Exception {
-        arraySaveOverflow(storage);
-    }
-
     @Test
     public void get() throws Exception {
         Assert.assertEquals(new Resume(UUID2), storage.get(UUID2));
@@ -98,6 +92,4 @@ public abstract class AbstractStorageTest {
         Assert.assertEquals(new Resume(UUID3), resumes[2]);
         Assert.assertEquals(3, resumes.length);
     }
-
-    public abstract void arraySaveOverflow(Storage storage) throws Exception;
 }

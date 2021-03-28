@@ -9,31 +9,33 @@ public class MapStorage extends AbstractStorage {
     private final Map<String, Resume> storage = new LinkedHashMap<>();
 
     @Override
-    protected void saveResume(Resume resume, int index) {
+    protected void saveResume(Resume resume, Object key) {
         storage.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected void updateResume(Resume resume, int index) {
+    protected void updateResume(Resume resume, Object key) {
         storage.replace(resume.getUuid(), resume);
     }
 
     @Override
-    protected Resume getResume(int index, String uuid) {
+    protected Resume getResume(Object key) {
+        return storage.get(((Resume) key).getUuid());
+    }
+
+    @Override
+    protected void deleteResume(Object key) {
+        storage.remove(((Resume) key).getUuid());
+    }
+
+    @Override
+    protected Resume findKey(String uuid) {
         return storage.get(uuid);
     }
 
     @Override
-    protected void deleteResume(int index, String uuid) {
-        storage.remove(uuid);
-    }
-
-    @Override
-    protected int findIndex(String uuid) {
-        if (storage.get(uuid) == null) {
-            return -1;
-        }
-        return 1;
+    protected boolean isExist(Object key) {
+        return key != null;
     }
 
     @Override
@@ -43,7 +45,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     public Resume[] getAll() {
-        return storage.values().toArray(new Resume[0]);
+        return storage.values().toArray(new Resume[storage.size()]);
     }
 
     @Override

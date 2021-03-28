@@ -11,36 +11,42 @@ public abstract class AbstractStorage implements Storage {
     }
 
     public final void save(Resume resume) {
-        int index = findIndex(resume.getUuid());
-        if (index >= 0) {
-            throw new ExistStorageException(resume.getUuid());
-        }
-        saveResume(resume, index);
+        saveResume(resume, checkExistStorageException(resume.getUuid()));
     }
 
     public final Resume get(String uuid) {
-        return getResume(checkNotExistStorageException(uuid),uuid);
+        return getResume(checkNotExistStorageException(uuid));
     }
 
     public final void delete(String uuid) {
-        deleteResume(checkNotExistStorageException(uuid),uuid);
+        deleteResume(checkNotExistStorageException(uuid));
     }
 
-    protected abstract void saveResume(Resume resume, int index);
+    protected abstract void saveResume(Resume resume, Object key);
 
-    protected abstract void updateResume(Resume resume, int index);
+    protected abstract void updateResume(Resume resume, Object key);
 
-    protected abstract Resume getResume(int index,String uuid);
+    protected abstract Resume getResume(Object key);
 
-    protected abstract void deleteResume(int index, String uuid);
+    protected abstract void deleteResume(Object key);
 
-    protected abstract int findIndex(String uuid);
+    protected abstract Object findKey(String uuid);
 
-    private int checkNotExistStorageException(String uuid) {
-        int index = findIndex(uuid);
-        if (index < 0) {
+    private Object checkNotExistStorageException(String uuid) {
+        Object key = findKey(uuid);
+        if (!isExist(key)) {
             throw new NotExistStorageException(uuid);
         }
-        return index;
+        return key;
     }
+
+    private Object checkExistStorageException(String uuid) {
+        Object key = findKey(uuid);
+        if (isExist(key)) {
+            throw new ExistStorageException(uuid);
+        }
+        return key;
+    }
+
+    protected abstract boolean isExist(Object key);
 }
