@@ -7,19 +7,19 @@ import com.resume.webapp.model.Resume;
 public abstract class AbstractStorage implements Storage {
 
     public final void update(Resume resume) {
-        updateResume(resume, checkNotExistStorageException(resume.getUuid()));
+        updateResume(resume, getKeyIfNotExist(resume.getUuid()));
     }
 
     public final void save(Resume resume) {
-        saveResume(resume, checkExistStorageException(resume.getUuid()));
+        saveResume(resume, getKeyIfExist(resume.getUuid()));
     }
 
     public final Resume get(String uuid) {
-        return getResume(checkNotExistStorageException(uuid));
+        return getResume(getKeyIfNotExist(uuid));
     }
 
     public final void delete(String uuid) {
-        deleteResume(checkNotExistStorageException(uuid));
+        deleteResume(getKeyIfNotExist(uuid));
     }
 
     protected abstract void saveResume(Resume resume, Object key);
@@ -32,7 +32,7 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract Object findKey(String uuid);
 
-    private Object checkNotExistStorageException(String uuid) {
+    private Object getKeyIfNotExist(String uuid) {
         Object key = findKey(uuid);
         if (!isExist(key)) {
             throw new NotExistStorageException(uuid);
@@ -40,7 +40,7 @@ public abstract class AbstractStorage implements Storage {
         return key;
     }
 
-    private Object checkExistStorageException(String uuid) {
+    private Object getKeyIfExist(String uuid) {
         Object key = findKey(uuid);
         if (isExist(key)) {
             throw new ExistStorageException(uuid);
