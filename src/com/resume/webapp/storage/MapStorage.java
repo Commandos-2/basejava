@@ -2,41 +2,22 @@ package com.resume.webapp.storage;
 
 import com.resume.webapp.model.Resume;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
-public class MapStorage extends AbstractStorage {
-    private final Map<String, Resume> storage = new LinkedHashMap<>();
+public abstract class MapStorage extends AbstractStorage {
+    protected final Map<String, Resume> storage = new LinkedHashMap<>();
 
-    @Override
-    protected void saveResume(Resume resume, Object key) {
-        storage.put(resume.getUuid(), resume);
-    }
+    abstract protected void saveResume(Resume resume, Object key);
 
-    @Override
-    protected void updateResume(Resume resume, Object key) {
-        storage.replace(resume.getUuid(), resume);
-    }
+    abstract protected void updateResume(Resume resume, Object key);
 
-    @Override
-    protected Resume getResume(Object key) {
-        return storage.get((String) key);
-    }
+    abstract protected Object getResume(Object key);
 
-    @Override
-    protected void deleteResume(Object key) {
-        storage.remove((String) key);
-    }
+    abstract protected void deleteResume(Object key);
 
-    @Override
-    protected String findKey(String uuid) {
-        return uuid;
-    }
+    abstract protected Object findKey(String fullName);
 
-    @Override
-    protected boolean isExist(Object key) {
-        return storage.get((String)key)!=null;
-    }
+    abstract protected boolean isExist(Object key);
 
     @Override
     public void clear() {
@@ -44,8 +25,10 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
-        return storage.values().toArray(new Resume[storage.size()]);
+    public List<Resume> getAllSorted() {
+        List<Resume> sortedList = new ArrayList<Resume>(storage.values());
+        sortedList.sort(RESUME_COMPARATOR);
+        return sortedList;
     }
 
     @Override

@@ -3,7 +3,9 @@ package com.resume.webapp.storage;
 import com.resume.webapp.exception.StorageException;
 import com.resume.webapp.model.Resume;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int STORAGE_LIMIT = 10000;
@@ -15,8 +17,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         lastPosition = 0;
     }
 
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, lastPosition);
+    public List<Resume> getAllSorted() {
+        List<Resume> sortedList= new ArrayList<Resume>(lastPosition);
+        sortedList.addAll(Arrays.asList(storage).subList(0, lastPosition));
+      //  sortedList.sort(RESUME_COMPARATOR);
+        return sortedList;
     }
 
     public int size() {
@@ -26,7 +31,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     @Override
     protected void saveResume(Resume resume, Object key) {
         if (lastPosition >= storage.length) {
-            throw new StorageException("Хранилище переполнено. Резюме не сохранено", resume.getUuid());
+            throw new StorageException("Хранилище переполнено. Резюме не сохранено", resume.getFullName());
         }
         saveResumeToArray(resume, (Integer) key);
         lastPosition++;
@@ -55,8 +60,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     @Override
     protected boolean isExist(Object key) {
-        return (Integer) key > 0;
+        return (Integer) key >= 0;
     }
 
-    protected abstract Integer findKey(String uuid);
+    protected abstract Integer findKey(String fullName);
 }

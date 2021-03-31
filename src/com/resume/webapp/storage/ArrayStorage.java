@@ -19,9 +19,9 @@ public class ArrayStorage extends AbstractArrayStorage {
 
     // функция проверки наличия резюме с указанным uuid в базе (при наличи возвращает индекс в базе)
     @Override
-    protected Integer findKey(String uuid) {
+    protected Integer findKey(String fullName) {
         for (int i = 0; i < lastPosition; i++) {
-            if (storage[i].getUuid().equals(uuid)) {
+            if (storage[i].getFullName().equals(fullName)) {
                 return i;
             }
         }

@@ -1,7 +1,7 @@
 package com.resume.webapp.exception;
 
 public class NotExistStorageException extends StorageException {
-    public NotExistStorageException(String uuid) {
-        super("Резюме "+uuid+" не существует",uuid);
+    public NotExistStorageException(String fullName) {
+        super("Резюме "+fullName+" не существует",fullName);
     }
 }

@@ -1,7 +1,7 @@
 package com.resume.webapp.storage;
 
-public class MapStorageTest extends AbstractStorageTest {
-    public MapStorageTest() {
-        super(new MapStorage());
+abstract public class MapStorageTest extends AbstractStorageTest {
+    public MapStorageTest(Storage storage) {
+        super(storage);
     }
 }

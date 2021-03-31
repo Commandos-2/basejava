@@ -14,8 +14,9 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
-        return (Resume[]) storage.toArray(new Resume[0]);
+    public List<Resume> getAllSorted() {
+        storage.sort(RESUME_COMPARATOR);
+        return storage;
     }
 
     @Override
@@ -40,7 +41,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected void deleteResume(Object key) {
-        storage.remove(((Integer)key).intValue());
+        storage.remove(((Integer) key).intValue());
     }
 
     @Override
@@ -49,9 +50,9 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Integer findKey(String uuid) {
+    protected Integer findKey(String fullName) {
         for (int i = 0; i < storage.size(); i++) {
-            if ((storage.get(i)).getUuid().equals(uuid)) {
+            if ((storage.get(i)).getFullName().equals(fullName)) {
                 return i;
             }
         }

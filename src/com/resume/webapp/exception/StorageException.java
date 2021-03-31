@@ -1,14 +1,14 @@
 package com.resume.webapp.exception;
 
 public class StorageException extends RuntimeException   {
-    private final String uuid;
+    private final String fullName;
 
-    public StorageException(String message,String uuid) {
+    public StorageException(String message,String fullName) {
         super(message);
-        this.uuid = uuid;
+        this.fullName = fullName;
     }
 
     public String getUuid() {
-        return uuid;
+        return fullName;
     }
 }
