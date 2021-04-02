@@ -17,10 +17,10 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         lastPosition = 0;
     }
 
-    public List<Resume> getAllSorted() {
-        List<Resume> sortedList= new ArrayList<Resume>(lastPosition);
+    @Override
+    protected List<Resume> getAllSortedImplementation() {
+        List<Resume> sortedList = new ArrayList<Resume>(lastPosition);
         sortedList.addAll(Arrays.asList(storage).subList(0, lastPosition));
-      //  sortedList.sort(RESUME_COMPARATOR);
         return sortedList;
     }
 
@@ -31,7 +31,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     @Override
     protected void saveResume(Resume resume, Object key) {
         if (lastPosition >= storage.length) {
-            throw new StorageException("Хранилище переполнено. Резюме не сохранено", resume.getFullName());
+            throw new StorageException("Хранилище переполнено. Резюме не сохранено", resume.getUuid());
         }
         saveResumeToArray(resume, (Integer) key);
         lastPosition++;
@@ -63,5 +63,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return (Integer) key >= 0;
     }
 
-    protected abstract Integer findKey(String fullName);
+    protected Integer findKey(String uuid) {
+        for (int i = 0; i < lastPosition; i++) {
+            if (storage[i].getUuid().equals(uuid)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }

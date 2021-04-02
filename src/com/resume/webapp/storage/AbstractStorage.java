@@ -5,9 +5,10 @@ import com.resume.webapp.exception.NotExistStorageException;
 import com.resume.webapp.model.Resume;
 
 import java.util.Comparator;
+import java.util.List;
 
 public abstract class AbstractStorage implements Storage {
-    static class ResumeComparator implements Comparator<Resume> {
+    /*static class ResumeComparator implements Comparator<Resume> {
         @Override
         public int compare(Resume o1, Resume o2) {
             if(o1.getFullName().equals(o2.getFullName()))
@@ -16,24 +17,33 @@ public abstract class AbstractStorage implements Storage {
             }
             return o1.getFullName().compareTo(o2.getFullName());
         }
-    }
-
-    static final ResumeComparator RESUME_COMPARATOR = new ResumeComparator();
+    }*/
+    Comparator<Resume> RESUME_COMPARATOR = Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
+    // static final ResumeComparator RESUME_COMPARATOR = new ResumeComparator();
 
     public final void update(Resume resume) {
-        updateResume(resume, getKeyIfNotExist(resume.getFullName()));
+        updateResume(resume, getKeyIfExist(resume.getUuid()));
     }
 
     public final void save(Resume resume) {
-        saveResume(resume, getKeyIfExist(resume.getFullName()));
+        saveResume(resume, getKeyIfNotExist(resume.getUuid()));
     }
 
-    public final Resume get(String fullName) {
-        return (Resume) getResume(getKeyIfNotExist(fullName));
+    public final Resume get(String uuid) {
+        return (Resume) getResume(getKeyIfExist(uuid));
     }
 
-    public final void delete(String fullName) {
-        deleteResume(getKeyIfNotExist(fullName));
+    public final void delete(String uuid) {
+        deleteResume(getKeyIfExist(uuid));
+    }
+
+    @Override
+    public List<Resume> getAllSorted() {
+        List<Resume> sortedList;
+        sortedList = getAllSortedImplementation();
+        // = new ArrayList<Resume>(storage.values());
+        sortedList.sort(RESUME_COMPARATOR);
+        return sortedList;
     }
 
     protected abstract void saveResume(Resume resume, Object key);
@@ -44,26 +54,26 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract void deleteResume(Object key);
 
-    protected abstract Object findKey(String fullName);
+    protected abstract Object findKey(String uuid);
 
-    private Object getKeyIfNotExist(String fullName) {
-        Object key = findKey(fullName);
+    private Object getKeyIfExist(String uuid) {
+        Object key = findKey(uuid);
         if (!isExist(key)) {
-            throw new NotExistStorageException(fullName);
+            throw new NotExistStorageException(uuid);
         }
         return key;
     }
 
-    private Object getKeyIfExist(String fullName) {
-        Object key = findKey(fullName);
+    private Object getKeyIfNotExist(String uuid) {
+        Object key = findKey(uuid);
         if (isExist(key)) {
-            throw new ExistStorageException(fullName);
+            throw new ExistStorageException(uuid);
         }
         return key;
     }
 
     protected abstract boolean isExist(Object key);
 
-
+    protected abstract List<Resume> getAllSortedImplementation();
 }
 

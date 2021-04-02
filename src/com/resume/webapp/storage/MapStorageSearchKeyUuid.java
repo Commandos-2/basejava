@@ -2,10 +2,11 @@ package com.resume.webapp.storage;
 
 import com.resume.webapp.model.Resume;
 
-public class MapStorageSearchKeyFullName extends MapStorage {
+public class MapStorageSearchKeyUuid extends AbstractMapStorage {
+
     @Override
-    protected Object findKey(String fullName) {
-        return fullName;
+    protected Object findKey(String uuid) {
+        return uuid;
     }
 
     @Override
@@ -15,12 +16,12 @@ public class MapStorageSearchKeyFullName extends MapStorage {
 
     @Override
     protected void saveResume(Resume resume, Object key) {
-        storage.put(resume.getFullName(), resume);
+        storage.put(resume.getUuid(), resume);
     }
 
     @Override
     protected void updateResume(Resume resume, Object key) {
-        storage.replace(resume.getFullName(), resume);
+        storage.replace(resume.getUuid(), resume);
     }
 
     @Override

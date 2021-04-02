@@ -7,10 +7,11 @@ import java.util.UUID;
  */
 public class Resume {
     private final String uuid;
-    private String fullName;
+    private final String fullName;
 
-    public Resume() {
-        this(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+    public Resume(String fullName) {
+        this.uuid=UUID.randomUUID().toString();
+        this.fullName = fullName;
     }
 
     public Resume(String uuid, String fullName) {

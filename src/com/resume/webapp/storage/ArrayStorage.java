@@ -16,15 +16,4 @@ public class ArrayStorage extends AbstractArrayStorage {
     protected void deleteResumeFromArray(int index) {
         storage[index] = storage[lastPosition - 1];
     }
-
-    // функция проверки наличия резюме с указанным uuid в базе (при наличи возвращает индекс в базе)
-    @Override
-    protected Integer findKey(String fullName) {
-        for (int i = 0; i < lastPosition; i++) {
-            if (storage[i].getFullName().equals(fullName)) {
-                return i;
-            }
-        }
-        return -1;
-    }
 }

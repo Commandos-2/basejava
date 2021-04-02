@@ -1,6 +1,5 @@
 package com.resume.webapp.storage;
 
-
 import com.resume.webapp.exception.ExistStorageException;
 import com.resume.webapp.exception.NotExistStorageException;
 import com.resume.webapp.model.Resume;
@@ -43,7 +42,7 @@ public abstract class AbstractStorageTest {
     public void update() throws Exception {
         storage.update(new Resume(UUID2, FULL_NAME2));
         Assert.assertEquals(3, storage.size());
-        Assert.assertEquals(new Resume(UUID2, FULL_NAME2), storage.get(FULL_NAME2));
+        Assert.assertEquals(new Resume(UUID2, FULL_NAME2), storage.get(UUID2));
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -55,7 +54,7 @@ public abstract class AbstractStorageTest {
     public void save() throws Exception {
         storage.save(new Resume(UUID23, FULL_NAME23));
         Assert.assertEquals(4, storage.size());
-        storage.get(FULL_NAME23);
+        storage.get(UUID23);
     }
 
     @Test(expected = ExistStorageException.class)
@@ -65,7 +64,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void get() throws Exception {
-        Assert.assertEquals(new Resume(UUID2, FULL_NAME2), storage.get(FULL_NAME2));
+        Assert.assertEquals(new Resume(UUID2, FULL_NAME2), storage.get(UUID2));
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -75,14 +74,14 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void delete() throws Exception {
-        storage.delete(FULL_NAME2);
+        storage.delete(UUID2);
         Assert.assertEquals(2, storage.size());
-        storage.get(FULL_NAME2);
+        storage.get(UUID2);
     }
 
     @Test(expected = NotExistStorageException.class)
     public void deleteNotExist() throws Exception {
-        storage.delete(FULL_NAME23);
+        storage.delete(UUID23);
     }
 
     @Test
