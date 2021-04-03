@@ -3,7 +3,6 @@ package com.resume.webapp.storage;
 import com.resume.webapp.exception.StorageException;
 import com.resume.webapp.model.Resume;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,10 +17,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected List<Resume> getAllSortedImplementation() {
-        List<Resume> sortedList = new ArrayList<Resume>(lastPosition);
-        sortedList.addAll(Arrays.asList(storage).subList(0, lastPosition));
-        return sortedList;
+    protected List<Resume> getAll() {
+        return Arrays.asList(Arrays.copyOf(storage, lastPosition));
     }
 
     public int size() {
@@ -63,12 +60,5 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return (Integer) key >= 0;
     }
 
-    protected Integer findKey(String uuid) {
-        for (int i = 0; i < lastPosition; i++) {
-            if (storage[i].getUuid().equals(uuid)) {
-                return i;
-            }
-        }
-        return -1;
-    }
+    protected abstract Integer findKey(String uuid);
 }

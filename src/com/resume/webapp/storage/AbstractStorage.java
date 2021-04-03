@@ -39,9 +39,7 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        List<Resume> sortedList;
-        sortedList = getAllSortedImplementation();
-        // = new ArrayList<Resume>(storage.values());
+        List<Resume> sortedList = getAll();
         sortedList.sort(RESUME_COMPARATOR);
         return sortedList;
     }
@@ -74,6 +72,6 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract boolean isExist(Object key);
 
-    protected abstract List<Resume> getAllSortedImplementation();
+    protected abstract List<Resume> getAll();
 }
 

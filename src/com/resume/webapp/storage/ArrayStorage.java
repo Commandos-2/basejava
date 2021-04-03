@@ -16,4 +16,14 @@ public class ArrayStorage extends AbstractArrayStorage {
     protected void deleteResumeFromArray(int index) {
         storage[index] = storage[lastPosition - 1];
     }
+
+    @Override
+    protected Integer findKey(String uuid) {
+        for (int i = 0; i < lastPosition; i++) {
+            if (storage[i].getUuid().equals(uuid)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
