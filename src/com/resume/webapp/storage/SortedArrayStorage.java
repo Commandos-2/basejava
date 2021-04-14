@@ -27,5 +27,4 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         Resume searchKey = new Resume(uuid, uuid);
         return Arrays.binarySearch(storage, 0, lastPosition, searchKey, Comparator.comparing(Resume::getUuid));
     }
-
 }
