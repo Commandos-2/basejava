@@ -1,7 +1,7 @@
 package com.resume.webapp.model;
 
-public class SectionText extends AbstractSection {
-    public SectionText(String information) {
+public class TextSection extends AbstractSection {
+    public TextSection(String information) {
         super(information);
     }
 
@@ -16,7 +16,7 @@ public class SectionText extends AbstractSection {
     }
 
     @Override
-    public String getStringInformation(Object information) {
-        return (String) information;
+    public String getStringInformation() {
+        return this.getInformation();
     }
 }
