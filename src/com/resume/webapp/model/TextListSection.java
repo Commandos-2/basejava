@@ -9,8 +9,8 @@ public class TextListSection extends AbstractSection {
     }
 
     @Override
-    public List getInformation() {
-        return (List)information;
+    public List<String> getInformation() {
+        return (List<String>) information;
     }
 
     @Override
@@ -19,7 +19,7 @@ public class TextListSection extends AbstractSection {
     }
 
     @Override
-    public String getStringInformation() {
-        return String.join(" \n ",  this.getInformation());
+    public String toString() {
+        return String.join(" \n ", this.getInformation());
     }
 }

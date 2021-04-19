@@ -1,6 +1,6 @@
 package com.resume.webapp.model;
 
-public enum TypeSection {
+public enum SectionType {
 
     PERSONAL("Личные качества"),
     OBJECTIVE("Позиция"),
@@ -10,7 +10,7 @@ public enum TypeSection {
     EDUCATION("Образование");
     private String title;
 
-    TypeSection(String title) {
+    SectionType(String title) {
         this.title = title;
     }
 

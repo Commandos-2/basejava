@@ -11,7 +11,7 @@ public abstract class AbstractSection {
 
     public abstract void setInformation(Object setInformation);
 
-    public abstract String getStringInformation();
+    public abstract String toString();
 
 
 }

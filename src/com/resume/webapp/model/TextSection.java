@@ -16,7 +16,7 @@ public class TextSection extends AbstractSection {
     }
 
     @Override
-    public String getStringInformation() {
-        return this.getInformation();
+    public String toString() {
+        return (String) information;
     }
 }

@@ -5,23 +5,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class InformationSection extends AbstractSection {
-    public InformationSection(ArrayList<Information> information) {
-        super(information);
+public class Organization extends AbstractSection {
+    public Organization(ArrayList<Experiense> experienses) {
+        super(experienses);
     }
 
-    public static class Information {
+    public static class Experiense {
         SimpleDateFormat formater = new SimpleDateFormat("MM-YYYY");
-        String title = null;
-        Date initialDate = null;
-        Date endDate = null;
-        String heading = null;
-        String text = null;
+        String title;
+        Date initialDate;
+        Date endDate;
+        String heading;
+        String text;
 
-        public Information() {
-        }
-
-        public Information(String title, Date initialDate, Date endDate, String heading, String text) {
+        public Experiense(String title, Date initialDate, Date endDate, String heading, String text) {
             this.title = title;
             this.initialDate = initialDate;
             this.endDate = endDate;
@@ -51,8 +48,8 @@ public class InformationSection extends AbstractSection {
     }
 
     @Override
-    public List getInformation() {
-        return(List) information;
+    public List<Experiense> getInformation() {
+        return (List<Experiense>) information;
     }
 
     @Override
@@ -61,14 +58,15 @@ public class InformationSection extends AbstractSection {
     }
 
     @Override
-    public String getStringInformation() {
+    public String toString() {
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < this.getInformation().size(); i++) {
-            sb.append(((ArrayList<Information>) this.getInformation()).get(i).getTitle() + "\n" +
-                    ((ArrayList<Information>) this.getInformation()).get(i).getInitialDate() + "-" +
-                    ((ArrayList<Information>) this.getInformation()).get(i).getEndDate() + "     " +
-                    ((ArrayList<Information>) this.getInformation()).get(i).getHeading() + "\n" +
-                    ((ArrayList<Information>) this.getInformation()).get(i).getText()+ "\n\n");
+            sb.append(((ArrayList<Experiense>)
+                    this.getInformation()).get(i).getTitle()).append("\n").append(((ArrayList<Experiense>)
+                    this.getInformation()).get(i).getInitialDate()).append("-").append(((ArrayList<Experiense>)
+                    this.getInformation()).get(i).getEndDate()).append("     ").append(((ArrayList<Experiense>)
+                    this.getInformation()).get(i).getHeading()).append("\n").append(((ArrayList<Experiense>)
+                    this.getInformation()).get(i).getText()).append("\n\n");
         }
         return String.valueOf(sb);
     }

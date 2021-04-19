@@ -8,8 +8,8 @@ import java.util.*;
 public class Resume {
     private final String uuid;
     private final String fullName;
-    private final Map<TypeSection, AbstractSection> section = new EnumMap<>(TypeSection.class);
-    private final Map<TypeContacts, String> contacts = new EnumMap<>(TypeContacts.class);
+    private final Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
+    private final Map<ContactsType, String> contacts = new EnumMap<>(ContactsType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -30,51 +30,44 @@ public class Resume {
         return fullName;
     }
 
-    public void addSection(TypeSection type,AbstractSection section)
-    {
+    public void addSection(SectionType type, AbstractSection section) {
         Objects.requireNonNull(type, "Тип секции не должен быть равен null");
         Objects.requireNonNull(section, "Информация заносимая в секцию не должна быть равна null");
-        this.section.put(type,section);
+        this.sections.put(type, section);
     }
-    public void addContacts(TypeContacts type,String section)
-    {
+
+    public void addContact(ContactsType type, String section) {
         Objects.requireNonNull(type, "Тип секции не должен быть равен null");
         Objects.requireNonNull(section, "Информация заносимая в секцию не должна быть равна null");
-        this.contacts.put(type,section);
+        this.contacts.put(type, section);
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Resume resume = (Resume) o;
         return uuid.equals(resume.uuid) &&
-                fullName.equals(resume.fullName)&&
-                section.equals(resume.section)&&
+                fullName.equals(resume.fullName) &&
+                sections.equals(resume.sections) &&
                 contacts.equals(resume.contacts);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, fullName,section,contacts);
+        return Objects.hash(uuid, fullName, sections, contacts);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(uuid + " - (" + fullName + ")\n\n");
-        for (Map.Entry<TypeContacts, String> entry : contacts.entrySet()) {
-            sb.append(entry.getKey().getTitle() + " - ");
-            sb.append(entry.getValue() + "\n");
+        sb.append(uuid).append(" - (").append(fullName).append(")\n\n");
+        for (Map.Entry<ContactsType, String> entry : contacts.entrySet()) {
+            sb.append(entry.getKey().getTitle()).append(" - ").append(entry.getValue()).append("\n");
         }
-        for (Map.Entry<TypeSection, AbstractSection> entry : section.entrySet()) {
-            sb.append("\n\n"+entry.getKey().getTitle()+"\n\n");
-            sb.append(entry.getValue().getStringInformation());
+        for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
+            sb.append("\n\n").append(entry.getKey().getTitle()).append("\n\n").append(entry.getValue().toString());
         }
         return String.valueOf(sb);
     }
-
-    //  @Override
-    //  public int compareTo(Resume o) {
-    //     return uuid.compareTo(o.uuid);
-    //}
 }

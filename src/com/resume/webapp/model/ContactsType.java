@@ -1,12 +1,12 @@
 package com.resume.webapp.model;
 
-public enum TypeContacts {
+public enum ContactsType {
     PHONE("Телефон"),
     EMAIL("Электронная почта"),
     SKYPE("Скайп");
     private String title;
 
-    TypeContacts(String title) {
+    ContactsType(String title) {
         this.title = title;
     }
 
