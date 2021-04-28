@@ -30,6 +30,14 @@ public class Resume {
         return fullName;
     }
 
+    public AbstractSection getSections(SectionType type) {
+        return sections.get(type);
+    }
+
+    public String getContacts(ContactsType type) {
+        return contacts.get(type);
+    }
+
     public void addSection(SectionType type, AbstractSection section) {
         Objects.requireNonNull(type, "Тип секции не должен быть равен null");
         Objects.requireNonNull(section, "Информация заносимая в секцию не должна быть равна null");
@@ -47,10 +55,10 @@ public class Resume {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Resume resume = (Resume) o;
-        return uuid.equals(resume.uuid) &&
-                fullName.equals(resume.fullName) &&
-                sections.equals(resume.sections) &&
-                contacts.equals(resume.contacts);
+        return Objects.equals(uuid, resume.uuid) &&
+                Objects.equals(fullName, resume.fullName) &&
+                Objects.equals(sections, resume.sections) &&
+                Objects.equals(contacts, resume.contacts);
     }
 
     @Override

@@ -18,8 +18,9 @@ public class TextListSection extends AbstractSection {
         information = setInformation;
     }
 
+
     @Override
     public String toString() {
-        return String.join(" \n ", this.getInformation());
+        return String.join(" \n ", (List<String>) information);
     }
 }

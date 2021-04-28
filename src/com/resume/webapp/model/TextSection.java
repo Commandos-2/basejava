@@ -10,6 +10,8 @@ public class TextSection extends AbstractSection {
         return (String) information;
     }
 
+
+
     @Override
     public void setInformation(Object setInformation) {
         information = setInformation;
