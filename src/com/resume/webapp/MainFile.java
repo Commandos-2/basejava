@@ -11,7 +11,7 @@ public class MainFile {
     public static void printСontent(File file, String indent) {
         System.out.println(indent + file.getName() + "{");
         indent += "-";
-        String list[] = file.list();
+        String[] list = file.list();
         for (String name : list) {
             File dir = new File(name);
             if (dir.isDirectory()) {

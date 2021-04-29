@@ -12,12 +12,12 @@ public class Organization extends AbstractSection {
     }
 
     public static class Experiense {
-        private DateTimeFormatter formater = DateTimeFormatter.ofPattern("MM.yyyy");
-        private Link title;
-        private ArrayList<LocalDate> initialDate;
-        private ArrayList<LocalDate> endDate;
-        private ArrayList<String> heading;
-        private ArrayList<String> text;
+        private final DateTimeFormatter formater = DateTimeFormatter.ofPattern("MM.yyyy");
+        private final Link title;
+        private final ArrayList<LocalDate> initialDate;
+        private final ArrayList<LocalDate> endDate;
+        private final ArrayList<String> heading;
+        private final ArrayList<String> text;
 
         public Experiense(String name, String url, ArrayList<LocalDate> initialDate, ArrayList<LocalDate> endDate, ArrayList<String> heading, ArrayList<String> text) {
             Objects.requireNonNull(initialDate, "initialDate не может быть null");

@@ -4,7 +4,7 @@ public enum ContactsType {
     PHONE("Телефон"),
     EMAIL("Электронная почта"),
     SKYPE("Скайп");
-    private String title;
+    private final String title;
 
     ContactsType(String title) {
         this.title = title;

@@ -26,8 +26,9 @@ public abstract class AbstractFileStorage extends AbstractStorage {
     @Override
     protected void saveResume(Resume resume, Object file) {
         try {
-            ((File) file).createNewFile();
-            doWrite(resume, file);
+            if(((File) file).createNewFile()) {
+                doWrite(resume, file);
+            }
         } catch (IOException e) {
             throw new StorageException("Ошибка ввода/вывода", ((File) file).getName(), e);
         }
@@ -49,7 +50,10 @@ public abstract class AbstractFileStorage extends AbstractStorage {
 
     @Override
     protected void deleteResume(Object file) {
-        ((File) file).delete();
+       if(!((File) file).delete())
+       {
+           throw new StorageException("Файл не удален", ((File) file).getName());
+       }
     }
 
     @Override
@@ -65,18 +69,26 @@ public abstract class AbstractFileStorage extends AbstractStorage {
     @Override
     protected List<Resume> getAll() {
         File[] list = directory.listFiles();
-        List<Resume> listResume=new ArrayList<>();
-        for (File file : list) {
-            listResume.add((Resume) getResume((File) file));
+        if (list != null) {
+            List<Resume> listResume = new ArrayList<>();
+            for (File file : list) {
+                listResume.add((Resume) getResume((File) file));
+            }
+            return listResume;
         }
-        return listResume;
+        return null;
     }
 
     @Override
     public void clear() {
         File[] list = directory.listFiles();
-        for (File file : list) {
-            file.delete();
+        if (list != null) {
+            for (File file : list) {
+                if (!file.delete())
+                {
+                    throw new StorageException("Файл не удален", ((File) file).getName());
+                }
+            }
         }
     }
 
