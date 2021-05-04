@@ -2,6 +2,7 @@ package com.resume.webapp.storage;
 
 import com.resume.webapp.exception.StorageException;
 import com.resume.webapp.model.Resume;
+import com.resume.webapp.model.StrategyType;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -13,6 +14,11 @@ import java.util.Objects;
 
 public class PathStorage extends AbstractStorage {
     private final Path directory;
+    private StrategyType strategy=StrategyType.OBJECT_STREAM;
+
+    public void setStrategy(StrategyType strategy) {
+        this.strategy = strategy;
+    }
 
     public PathStorage(String dir) {
         this.directory = Paths.get(dir);
@@ -34,12 +40,14 @@ public class PathStorage extends AbstractStorage {
         }
     }
 
-    protected void doWrite(Resume resume, OutputStream os) throws IOException {
-        ObjectStreamStorage.doWrite(resume, os);
+    protected  void doWrite(Resume resume, OutputStream os) throws IOException
+    {
+        strategy.getRealization().doWrite(resume,os);
     }
 
-    protected Resume doRead(InputStream is) throws IOException {
-        return ObjectStreamStorage.doRead(is);
+    protected  Resume doRead(InputStream is) throws IOException
+    {
+        return strategy.getRealization().doRead(is);
     }
 
     @Override

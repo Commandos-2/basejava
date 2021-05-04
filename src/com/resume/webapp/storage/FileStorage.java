@@ -2,6 +2,7 @@ package com.resume.webapp.storage;
 
 import com.resume.webapp.exception.StorageException;
 import com.resume.webapp.model.Resume;
+import com.resume.webapp.model.StrategyType;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -10,6 +11,11 @@ import java.util.Objects;
 
 public class FileStorage extends AbstractStorage {
     private final File directory;
+    private StrategyType strategy=StrategyType.OBJECT_STREAM;
+
+    public void setStrategy(StrategyType strategy) {
+        this.strategy = strategy;
+    }
 
     public FileStorage(File directory) {
         Objects.requireNonNull(directory,"Каталог не должен быть null");
@@ -35,12 +41,12 @@ public class FileStorage extends AbstractStorage {
 
     protected  void doWrite(Resume resume, OutputStream os) throws IOException
     {
-        ObjectStreamStorage.doWrite(resume,os);
+        strategy.getRealization().doWrite(resume,os);
     }
 
     protected  Resume doRead(InputStream is) throws IOException
     {
-        return ObjectStreamStorage.doRead(is);
+        return strategy.getRealization().doRead(is);
     }
 
     @Override

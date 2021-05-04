@@ -10,7 +10,7 @@ public class MainFile {
 
     public static void printСontent(File file, String indent) {
         System.out.println(indent + file.getName() + "{");
-        indent += "-";
+        indent += "-  ";
         String[] list = file.list();
         for (String name : list) {
             File dir = new File(name);
