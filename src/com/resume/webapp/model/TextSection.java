@@ -1,6 +1,7 @@
 package com.resume.webapp.model;
 
 public class TextSection extends AbstractSection {
+    private static final long serialVersionUID=1L;
     public TextSection(String information) {
         super(information);
     }

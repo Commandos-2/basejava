@@ -1,18 +1,20 @@
 package com.resume.webapp.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Organization extends AbstractSection {
+    private static final long serialVersionUID=1L;
     public Organization(ArrayList<Experiense> experienses) {
         super(experienses);
     }
 
-    public static class Experiense {
-        private final DateTimeFormatter formater = DateTimeFormatter.ofPattern("MM.yyyy");
+    public static class Experiense implements Serializable {
+        private static final long serialVersionUID=1L;
+        //private final DateTimeFormatter formater = DateTimeFormatter.ofPattern("MM.yyyy");
         private final Link title;
         private final ArrayList<LocalDate> initialDate;
         private final ArrayList<LocalDate> endDate;
@@ -44,7 +46,7 @@ public class Organization extends AbstractSection {
 
         @Override
         public int hashCode() {
-            return Objects.hash(formater, title, initialDate, endDate, heading, text);
+            return Objects.hash(title, initialDate, endDate, heading, text);
         }
 
         public Link getTitle() {
@@ -52,7 +54,7 @@ public class Organization extends AbstractSection {
         }
 
         public String getInitialDate(int i) {
-            return formater.format(initialDate.get(i));
+            return initialDate.get(i).toString();
         }
 
         public ArrayList<LocalDate> getInitialDate() {
@@ -60,7 +62,7 @@ public class Organization extends AbstractSection {
         }
 
         public String getEndDate(int i) {
-            return formater.format(endDate.get(i));
+            return endDate.get(i).toString();
         }
 
         public String getHeading(int i) {

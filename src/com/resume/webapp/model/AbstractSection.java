@@ -1,8 +1,9 @@
 package com.resume.webapp.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class AbstractSection {
+public abstract class AbstractSection implements Serializable {
     protected Object information;
 
     public AbstractSection(Object information) {

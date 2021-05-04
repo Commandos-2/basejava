@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TextListSection extends AbstractSection {
+    private static final long serialVersionUID=1L;
     public TextListSection(ArrayList<String> information) {
         super(information);
     }
