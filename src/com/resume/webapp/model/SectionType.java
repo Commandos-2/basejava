@@ -2,12 +2,12 @@ package com.resume.webapp.model;
 
 public enum SectionType {
 
-    PERSONAL("Личные качества"),
-    OBJECTIVE("Позиция"),
-    ACHIEVEMENT("Достижения"),
-    QUALIFICATIONS("Квалификация"),
-    EXPERIENCE("Опыт работы"),
-    EDUCATION("Образование");
+    PERSONAL("Personal"),
+    OBJECTIVE("Objective"),
+    ACHIEVEMENT("Achievement"),
+    QUALIFICATIONS("Qualifications"),
+    EXPERIENCE("Experience"),
+    EDUCATION("education");
     private String title;
 
     SectionType(String title) {

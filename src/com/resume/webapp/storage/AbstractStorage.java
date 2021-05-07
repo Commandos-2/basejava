@@ -7,7 +7,7 @@ import com.resume.webapp.model.Resume;
 import java.util.Comparator;
 import java.util.List;
 
-public abstract class AbstractStorage implements Storage {
+public abstract class AbstractStorage<SK> implements Storage {
     /*static class ResumeComparator implements Comparator<Resume> {
         @Override
         public int compare(Resume o1, Resume o2) {
@@ -44,17 +44,17 @@ public abstract class AbstractStorage implements Storage {
         return sortedList;
     }
 
-    protected abstract void saveResume(Resume resume, Object key);
+    protected abstract void saveResume(Resume resume, SK key);
 
-    protected abstract void updateResume(Resume resume, Object key);
+    protected abstract void updateResume(Resume resume, SK key);
 
-    protected abstract Object getResume(Object key);
+    protected abstract SK getResume(SK key);
 
-    protected abstract void deleteResume(Object key);
+    protected abstract void deleteResume(SK key);
 
     protected abstract Object findKey(String uuid);
 
-    private Object getKeyIfExist(String uuid) {
+    private SK getKeyIfExist(String uuid) {
         Object key = findKey(uuid);
         if (!isExist(key)) {
             throw new NotExistStorageException(uuid);

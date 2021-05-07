@@ -7,7 +7,7 @@ public abstract class AbstractSection implements Serializable {
     protected Object information;
 
     public AbstractSection(Object information) {
-        Objects.requireNonNull(information,"information не может быть null");
+        Objects.requireNonNull(information,"information not be null");
         this.information = information;
     }
 

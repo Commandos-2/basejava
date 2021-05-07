@@ -18,12 +18,13 @@ public class FileStorage extends AbstractStorage {
     }
 
     public FileStorage(File directory) {
-        Objects.requireNonNull(directory,"Каталог не должен быть null");
+        Objects.requireNonNull(directory,"The directory must not be null");
         if (!directory.isDirectory()) {
-            throw new IllegalArgumentException(directory.getAbsolutePath() + " не является каталогом.");
+            throw new IllegalArgumentException(directory.getAbsolutePath() + "not a directory.");
         }
         if (!directory.canRead() || !directory.canWrite()) {
-            throw new IllegalArgumentException(directory.getAbsolutePath() + " в каталог невозможно записать/считать информацию");
+            throw new IllegalArgumentException(directory.getAbsolutePath() + " \n" +
+                    "it is not possible to write/read information to the directory");
         }
         this.directory = directory;
     }
@@ -35,7 +36,7 @@ public class FileStorage extends AbstractStorage {
                 doWrite(resume, new BufferedOutputStream(new FileOutputStream((File)file)));
             }
         } catch (IOException e) {
-            throw new StorageException("Невозможно создать файл", ((File) file).getName(), e);
+            throw new StorageException("Unable to create file", ((File) file).getName(), e);
         }
     }
 
@@ -54,7 +55,7 @@ public class FileStorage extends AbstractStorage {
         try {
             doWrite(resume, new BufferedOutputStream(new FileOutputStream((File)file)));
         } catch (IOException e) {
-            throw new StorageException("Ошибка ввода/вывода", ((File) file).getName(), e);
+            throw new StorageException("I/O error", ((File) file).getName(), e);
         }
     }
 
@@ -63,14 +64,14 @@ public class FileStorage extends AbstractStorage {
         try {
             return doRead(new BufferedInputStream(new FileInputStream((File)file)));
         } catch (IOException e) {
-            throw new StorageException("Ошибка чтения файла", ((File) file).getName());
+            throw new StorageException("File reading error", ((File) file).getName());
         }
     }
 
     @Override
     protected void deleteResume(Object file) {
         if (!((File) file).delete()) {
-            throw new StorageException("Файл не удален", ((File) file).getName());
+            throw new StorageException("File not deleted", ((File) file).getName());
         }
     }
 
@@ -94,7 +95,7 @@ public class FileStorage extends AbstractStorage {
             }
             return listResume;
         }
-        throw new StorageException("Ошибка чтения файла", ((File) directory).getName());
+        throw new StorageException("File reading error", ((File) directory).getName());
     }
 
     @Override
@@ -103,7 +104,7 @@ public class FileStorage extends AbstractStorage {
         if (list != null) {
             for (File file : list) {
                 if (!file.delete()) {
-                    throw new StorageException("Файл не удален", ((File) file).getName());
+                    throw new StorageException("File not deleted", ((File) file).getName());
                 }
             }
         }
@@ -113,7 +114,8 @@ public class FileStorage extends AbstractStorage {
     public int size() {
         File[] list = directory.listFiles();
         if (list == null) {
-            throw new StorageException("Ошибка при запросе файлов в каталоге", ((File) directory).getName());
+            throw new StorageException("\n" +
+                    "Error when requesting files in a directory", ((File) directory).getName());
         }
         return list.length;
     }

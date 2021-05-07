@@ -22,9 +22,9 @@ public class PathStorage extends AbstractStorage {
 
     public PathStorage(String dir) {
         this.directory = Paths.get(dir);
-        Objects.requireNonNull(directory, "Каталог не должен быть null");
+        Objects.requireNonNull(directory, "The directory must not benull");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
-            throw new IllegalArgumentException(dir + " не является каталогом или в каталог невозможно записать/считать информацию");
+            throw new IllegalArgumentException(dir + " it is not a directory or it is not possible to write/read information to the directory");
         }
     }
 
@@ -36,7 +36,7 @@ public class PathStorage extends AbstractStorage {
                 doWrite(resume, new BufferedOutputStream(new FileOutputStream(String.valueOf((Path) file))));
             }
         } catch (IOException e) {
-            throw new StorageException("Невозможно создать файл", ((Path) file).toString(), e);
+            throw new StorageException("Unable to create file", ((Path) file).toString(), e);
         }
     }
 
@@ -55,7 +55,7 @@ public class PathStorage extends AbstractStorage {
         try {
             doWrite(resume, new BufferedOutputStream(new FileOutputStream((String.valueOf((Path) file)))));
         } catch (IOException e) {
-            throw new StorageException("Ошибка ввода/вывода", ((Path) file).toString(), e);
+            throw new StorageException("I/O error", ((Path) file).toString(), e);
         }
     }
 
@@ -64,7 +64,7 @@ public class PathStorage extends AbstractStorage {
         try {
             return doRead(new BufferedInputStream(new FileInputStream((String.valueOf((Path) file)))));
         } catch (IOException e) {
-            throw new StorageException("Ошибка чтения файла", ((Path) file).toString());
+            throw new StorageException("File reading error", ((Path) file).toString());
         }
     }
 
@@ -73,7 +73,7 @@ public class PathStorage extends AbstractStorage {
         try {
             Files.delete((Path) file);
         } catch (IOException e) {
-            throw new StorageException("Файл не удален", ((Path) file).toString());
+            throw new StorageException("File not deleted", ((Path) file).toString());
         }
     }
 
@@ -95,7 +95,7 @@ public class PathStorage extends AbstractStorage {
                 listResume.add((Resume) getResume((Path) file));
             });
         } catch (IOException e) {
-            throw new StorageException("Path не добавлен", null);
+            throw new StorageException("Path not added", null);
         }
         return listResume;
     }
@@ -105,7 +105,7 @@ public class PathStorage extends AbstractStorage {
         try {
             Files.list(directory).forEach(this::deleteResume);
         } catch (IOException e) {
-            throw new StorageException("Path не удален", null);
+            throw new StorageException("Path not deleted", null);
         }
     }
 
@@ -114,7 +114,8 @@ public class PathStorage extends AbstractStorage {
         try {
             return (int) Files.list(directory).count();
         } catch (IOException e) {
-            throw new StorageException("Ошибка при запросе файлов в каталоге", ((Path) directory).toString());
+            throw new StorageException("\n" +
+                    "Error when requesting files in a directory", ((Path) directory).toString());
         }
     }
 }

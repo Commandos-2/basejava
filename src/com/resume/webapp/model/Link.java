@@ -9,7 +9,7 @@ public class Link implements Serializable {
     private final String url;
 
     public Link(String name, String url) {
-        Objects.requireNonNull(name, "name не должно быть null");
+        Objects.requireNonNull(name, "name not be null");
         this.name = name;
         this.url = url;
     }

@@ -28,7 +28,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     @Override
     protected void saveResume(Resume resume, Object key) {
         if (lastPosition >= storage.length) {
-            throw new StorageException("Хранилище переполнено. Резюме не сохранено", resume.getUuid());
+            throw new StorageException("The storage is full. Resume not saved", resume.getUuid());
         }
         saveResumeToArray(resume, (Integer) key);
         lastPosition++;

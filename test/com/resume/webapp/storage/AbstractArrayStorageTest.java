@@ -17,7 +17,7 @@ public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
                 storage.save(new Resume("Alex" + i));
             }
         } catch (StorageException e) {
-            Assert.fail("Ошибка сохранения Резюме в хранилище. Отрицательный результат теста");
+            Assert.fail("Error saving the Resume to the repository. Negative test result");
         }
         storage.save(new Resume("AlexExist"));
     }

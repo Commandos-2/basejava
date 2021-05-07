@@ -22,9 +22,9 @@ public class Organization extends AbstractSection {
         private final ArrayList<String> text;
 
         public Experiense(String name, String url, ArrayList<LocalDate> initialDate, ArrayList<LocalDate> endDate, ArrayList<String> heading, ArrayList<String> text) {
-            Objects.requireNonNull(initialDate, "initialDate не может быть null");
-            Objects.requireNonNull(endDate, "endDate не может быть null");
-            Objects.requireNonNull(heading, "heading не может быть null");
+            Objects.requireNonNull(initialDate, "initialDate not be null");
+            Objects.requireNonNull(endDate, "endDate not be null");
+            Objects.requireNonNull(heading, "heading not be null");
             this.title = new Link(name, url);
             this.initialDate = initialDate;
             this.endDate = endDate;

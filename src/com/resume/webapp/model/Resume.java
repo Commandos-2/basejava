@@ -18,8 +18,8 @@ public class Resume implements Serializable {
     }
 
     public Resume(String uuid, String fullName) {
-        Objects.requireNonNull(uuid, "uuid не должен быть равен null");
-        Objects.requireNonNull(fullName, "fullName    не должен быть равен null");
+        Objects.requireNonNull(uuid, "uuid not be null");
+        Objects.requireNonNull(fullName, "fullName not be null");
         this.uuid = uuid;
         this.fullName = fullName;
     }
@@ -41,14 +41,14 @@ public class Resume implements Serializable {
     }
 
     public void addSection(SectionType type, AbstractSection section) {
-        Objects.requireNonNull(type, "Тип секции не должен быть равен null");
-        Objects.requireNonNull(section, "Информация заносимая в секцию не должна быть равна null");
+        Objects.requireNonNull(type, "Section type not be null");
+        Objects.requireNonNull(section, "Information not be null");
         this.sections.put(type, section);
     }
 
     public void addContact(ContactsType type, String section) {
-        Objects.requireNonNull(type, "Тип секции не должен быть равен null");
-        Objects.requireNonNull(section, "Информация заносимая в секцию не должна быть равна null");
+        Objects.requireNonNull(type, "Section type not be null");
+        Objects.requireNonNull(section, "Information not be null");
         this.contacts.put(type, section);
     }
 

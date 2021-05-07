@@ -1,10 +1,10 @@
 package com.resume.webapp.model;
 
-import com.resume.webapp.storage.ObjectStreamStorage;
+import com.resume.webapp.storage.strategy.ObjectStreamStrategy;
 import com.resume.webapp.storage.Strategy;
 
 public enum StrategyType {
-    OBJECT_STREAM(new ObjectStreamStorage());
+    OBJECT_STREAM(new ObjectStreamStrategy());
     Strategy realization;
 
     StrategyType(Strategy realization) {

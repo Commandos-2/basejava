@@ -11,11 +11,10 @@ public class MainFile {
     public static void printСontent(File file, String indent) {
         System.out.println(indent + file.getName() + "{");
         indent += "-  ";
-        String[] list = file.list();
-        for (String name : list) {
-            File dir = new File(name);
-            if (dir.isDirectory()) {
-                printСontent(dir, indent);
+        File[] list = file.listFiles();
+        for (File name : list) {
+            if (name.isDirectory()) {
+                printСontent(name, indent);
             } else {
                 System.out.println(indent + name);
             }

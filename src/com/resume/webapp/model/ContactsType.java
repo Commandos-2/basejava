@@ -1,9 +1,9 @@
 package com.resume.webapp.model;
 
 public enum ContactsType {
-    PHONE("Телефон"),
-    EMAIL("Электронная почта"),
-    SKYPE("Скайп");
+    PHONE("Telefon"),
+    EMAIL("Email"),
+    SKYPE("Skype");
     private final String title;
 
     ContactsType(String title) {
