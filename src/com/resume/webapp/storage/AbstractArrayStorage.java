@@ -6,7 +6,7 @@ import com.resume.webapp.model.Resume;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected static final int STORAGE_LIMIT = 10000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int lastPosition = 0;
@@ -26,27 +26,27 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void saveResume(Resume resume, Object key) {
+    protected void saveResume(Resume resume, Integer key) {
         if (lastPosition >= storage.length) {
             throw new StorageException("The storage is full. Resume not saved", resume.getUuid());
         }
-        saveResumeToArray(resume, (Integer) key);
+        saveResumeToArray(resume, key);
         lastPosition++;
     }
 
     @Override
-    protected final void updateResume(Resume resume, Object key) {
-        storage[(Integer) key] = resume;
+    protected final void updateResume(Resume resume, Integer key) {
+        storage[key] = resume;
     }
 
     @Override
-    protected final Resume getResume(Object key) {
-        return storage[(Integer) key];
+    protected final Resume getResume(Integer key) {
+        return storage[key];
     }
 
     @Override
-    protected final void deleteResume(Object key) {
-        deleteResumeFromArray((Integer) key);
+    protected final void deleteResume(Integer key) {
+        deleteResumeFromArray(key);
         storage[lastPosition - 1] = null;
         lastPosition--;
     }
@@ -56,8 +56,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected abstract void deleteResumeFromArray(int index);
 
     @Override
-    protected boolean isExist(Object key) {
-        return (Integer) key >= 0;
+    protected boolean isExist(Integer key) {
+        return key >= 0;
     }
 
     protected abstract Integer findKey(String uuid);

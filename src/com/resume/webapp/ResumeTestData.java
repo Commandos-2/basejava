@@ -54,38 +54,38 @@ public class ResumeTestData {
                 " архитектурных шаблонов, UML, функционального программирования");
         qualifications.add("Родной русский, английский \"upper intermediate\"");
         resume.addSection(SectionType.QUALIFICATIONS, new TextListSection(qualifications));
-        ArrayList<Organization.Experiense> experience = new ArrayList<Organization.Experiense>();
-        experience.add(new Organization.Experiense("Java Online Projects", "", new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("Автор проекта.")),
-                new ArrayList<String>(Collections.singleton("Создание, организация и проведение Java онлайн проектов и стажировок."))));
-        experience.add(new Organization.Experiense("Wrike", "", new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("Старший разработчик (backend)")), new ArrayList<String>(Collections.singleton("Проектирование" +
+
+        ArrayList<Organization> experience = new ArrayList<Organization>();
+        experience.add(new Organization("Java Online Projects", "",new Organization.Position( new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("Автор проекта.")),
+                new ArrayList<String>(Collections.singleton("Создание, организация и проведение Java онлайн проектов и стажировок.")))));
+        experience.add(new Organization("Wrike", "",new Organization.Position( new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("Старший разработчик (backend)")), new ArrayList<String>(Collections.singleton("Проектирование" +
                 " и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis)." +
-                " Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO."))));
-        experience.add(new Organization.Experiense("RIT Center", "", new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("Java архитектор")), new ArrayList<String>(Collections.singleton(
+                " Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.")))));
+        experience.add(new Organization("RIT Center", "",new Organization.Position( new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("Java архитектор")), new ArrayList<String>(Collections.singleton(
                 "Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI (Jenkins)," +
                         " миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы." +
                         " Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html)." +
                         " Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons," +
-                        " Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python"))));
-        experience.add(new Organization.Experiense("Luxoft (Deutsche Bank)", "", new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("Ведущий программист")), new ArrayList<String>(Collections.singleton("Участие" +
+                        " Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python")))));
+        experience.add(new Organization("Luxoft (Deutsche Bank)", "",new Organization.Position( new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("Ведущий программист")), new ArrayList<String>(Collections.singleton("Участие" +
                 " в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM." +
                 " Реализация RIA-приложения для администрирования, мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT," +
-                " ExtGWT (GXT), Highstock, Commet, HTML5."))));
-        experience.add(new Organization.Experiense("Yota", "", new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("Ведущий специалист")),
+                " ExtGWT (GXT), Highstock, Commet, HTML5.")))));
+        experience.add(new Organization("Yota", "",new Organization.Position( new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("Ведущий специалист")),
                 new ArrayList<String>(Collections.singleton("Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" (GlassFish v2.1, v3, OC4J, EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS," +
-                        " Maven2). Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)"))));
-        experience.add(new Organization.Experiense("Enkata", "", new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("Разработчик ПО")), new ArrayList<String>(Collections.singleton("Реализация клиентской" +
-                " (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей кластерного J2EE приложения (OLAP, Data mining)."))));
-        experience.add(new Organization.Experiense("Siemens AG", "", new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("Разработчик ПО")), new ArrayList<String>(Collections.singleton("Разработка информационной модели," +
-                " проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix)."))));
-        experience.add(new Organization.Experiense("Alcatel", "", new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("Инженер по аппаратному и программному тестированию")), new ArrayList<String>(Collections.singleton("\tИнженер по" +
-                " аппаратному и программному тестированию\n" +
-                "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM)."))));
-        resume.addSection(SectionType.EXPERIENCE, new Organization(experience));
-        ArrayList<Organization.Experiense> education = new ArrayList<Organization.Experiense>();
-        education.add(new Organization.Experiense("Coursera", "", new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("Functional Programming Principles in Scala\" by Martin Odersky")), new ArrayList<String>(Collections.singleton(""))));
-        education.add(new Organization.Experiense("Luxoft", "", new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("\tКурс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"")), new ArrayList<String>(Collections.singleton(""))));
-        education.add(new Organization.Experiense("Siemens AG", "", new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("3 месяца обучения мобильным IN сетям (Берлин)")), new ArrayList<String>(Collections.singleton(""))));
-        education.add(new Organization.Experiense("Alcatel", "", new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("6 месяцев обучения цифровым телефонным сетям (Москва)")), new ArrayList<String>(Collections.singleton(""))));
+                        " Maven2). Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)")))));
+        experience.add(new Organization("Enkata", "",new Organization.Position( new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("Разработчик ПО")), new ArrayList<String>(Collections.singleton("Реализация клиентской" +
+                " (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей кластерного J2EE приложения (OLAP, Data mining).")))));
+        experience.add(new Organization("Siemens AG", "",new Organization.Position( new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("Разработчик ПО")), new ArrayList<String>(Collections.singleton("Разработка информационной модели," +
+                " проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix).")))));
+        experience.add(new Organization("Alcatel", "",new Organization.Position( new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("Инженер по аппаратному и программному тестированию")), new ArrayList<String>(Collections.singleton(
+                "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).")))));
+        resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(experience));
+        ArrayList<Organization> education = new ArrayList<Organization>();
+        education.add(new Organization("Coursera", "",new Organization.Position( new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("Functional Programming Principles in Scala\" by Martin Odersky")), new ArrayList<String>(Collections.singleton("")))));
+        education.add(new Organization("Luxoft", "",new Organization.Position( new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("\tКурс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"")), new ArrayList<String>(Collections.singleton("")))));
+        education.add(new Organization("Siemens AG", "",new Organization.Position( new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("3 месяца обучения мобильным IN сетям (Берлин)")), new ArrayList<String>(Collections.singleton("")))));
+        education.add(new Organization("Alcatel", "",new Organization.Position( new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("6 месяцев обучения цифровым телефонным сетям (Москва)")), new ArrayList<String>(Collections.singleton("")))));
         ArrayList<LocalDate> list = new ArrayList<>();
         list.add(LocalDate.of(2014, 10, 11));
         list.add(LocalDate.of(2017, 10, 11));
@@ -98,10 +98,10 @@ public class ResumeTestData {
         ArrayList<String> list4 = new ArrayList<>();
         list4.add("");
         list4.add("");
-        education.add(new Organization.Experiense("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и " +
-                "оптики", "", list, list2, list3, list4));
-        education.add(new Organization.Experiense("Заочная физико-техническая школа при МФТИ", "", new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("Закончил с отличием")), new ArrayList<String>(Collections.singleton(""))));
-        resume.addSection(SectionType.EDUCATION, new Organization(education));
+        education.add(new Organization("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и " +
+                "оптики", "",new Organization.Position( list, list2, list3, list4)));
+        education.add(new Organization("Заочная физико-техническая школа при МФТИ", "",new Organization.Position( new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<LocalDate>(Collections.singleton(LocalDate.of(2014, 10, 11))), new ArrayList<String>(Collections.singleton("Закончил с отличием")), new ArrayList<String>(Collections.singleton("")))));
+        resume.addSection(SectionType.EDUCATION, new OrganizationSection(education));
         resume.addContact(ContactsType.PHONE, "+7(921) 855-0482");
         resume.addContact(ContactsType.EMAIL, "gkislin@yandex.ru");
         resume.addContact(ContactsType.SKYPE, "grigory.kislin");

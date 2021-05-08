@@ -4,7 +4,7 @@ import com.resume.webapp.model.Resume;
 
 import java.util.*;
 
-public abstract class AbstractMapStorage extends AbstractStorage {
+public abstract class AbstractMapStorage<R> extends AbstractStorage<R> {
     protected final Map<String, Resume> storage = new LinkedHashMap<>();
 
     @Override

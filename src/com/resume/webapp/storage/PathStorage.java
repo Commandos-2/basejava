@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class PathStorage extends AbstractStorage {
+public class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
     private StrategyType strategy=StrategyType.OBJECT_STREAM;
 
@@ -29,14 +29,14 @@ public class PathStorage extends AbstractStorage {
     }
 
     @Override
-    protected void saveResume(Resume resume, Object file) {
+    protected void saveResume(Resume resume, Path file) {
         try {
-            Files.createFile((Path) file);
-            if (Files.exists((Path) file)) {
-                doWrite(resume, new BufferedOutputStream(new FileOutputStream(String.valueOf((Path) file))));
+            Files.createFile(file);
+            if (Files.exists(file)) {
+                doWrite(resume, new BufferedOutputStream(new FileOutputStream(String.valueOf(file))));
             }
         } catch (IOException e) {
-            throw new StorageException("Unable to create file", ((Path) file).toString(), e);
+            throw new StorageException("Unable to create file", file.toString(), e);
         }
     }
 
@@ -51,40 +51,40 @@ public class PathStorage extends AbstractStorage {
     }
 
     @Override
-    protected void updateResume(Resume resume, Object file) {
+    protected void updateResume(Resume resume, Path file) {
         try {
-            doWrite(resume, new BufferedOutputStream(new FileOutputStream((String.valueOf((Path) file)))));
+            doWrite(resume, new BufferedOutputStream(new FileOutputStream((String.valueOf(file)))));
         } catch (IOException e) {
-            throw new StorageException("I/O error", ((Path) file).toString(), e);
+            throw new StorageException("I/O error", file.toString(), e);
         }
     }
 
     @Override
-    protected Object getResume(Object file) {
+    protected Resume getResume(Path file) {
         try {
-            return doRead(new BufferedInputStream(new FileInputStream((String.valueOf((Path) file)))));
+            return doRead(new BufferedInputStream(new FileInputStream((String.valueOf(file)))));
         } catch (IOException e) {
-            throw new StorageException("File reading error", ((Path) file).toString());
+            throw new StorageException("File reading error", file.toString());
         }
     }
 
     @Override
-    protected void deleteResume(Object file) {
+    protected void deleteResume(Path file) {
         try {
-            Files.delete((Path) file);
+            Files.delete(file);
         } catch (IOException e) {
-            throw new StorageException("File not deleted", ((Path) file).toString());
+            throw new StorageException("File not deleted", file.toString());
         }
     }
 
     @Override
-    protected Object findKey(String uuid) {
-        return Paths.get(String.valueOf(directory), uuid);//new File(directory, uuid);
+    protected Path findKey(String uuid) {
+        return Paths.get(String.valueOf(directory), uuid);
     }
 
     @Override
-    protected boolean isExist(Object file) {
-        return Files.exists((Path) file);
+    protected boolean isExist(Path file) {
+        return Files.exists(file);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class PathStorage extends AbstractStorage {
         List<Resume> listResume = new ArrayList<>();
         try {
             Files.list(directory).forEach(file -> {
-                listResume.add((Resume) getResume((Path) file));
+                listResume.add(getResume(file));
             });
         } catch (IOException e) {
             throw new StorageException("Path not added", null);
@@ -115,7 +115,7 @@ public class PathStorage extends AbstractStorage {
             return (int) Files.list(directory).count();
         } catch (IOException e) {
             throw new StorageException("\n" +
-                    "Error when requesting files in a directory", ((Path) directory).toString());
+                    "Error when requesting files in a directory", directory.toString());
         }
     }
 }
