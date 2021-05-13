@@ -2,7 +2,6 @@ package com.resume.webapp.storage;
 
 import com.resume.webapp.exception.StorageException;
 import com.resume.webapp.model.Resume;
-import com.resume.webapp.model.StrategyType;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -11,13 +10,9 @@ import java.util.Objects;
 
 public class FileStorage extends AbstractStorage<File> {
     private final File directory;
-    private StrategyType strategy = StrategyType.OBJECT_STREAM;
+    private Strategy strategy;
 
-    public void setStrategy(StrategyType strategy) {
-        this.strategy = strategy;
-    }
-
-    public FileStorage(File directory) {
+    public FileStorage(File directory, Strategy strategy) {
         Objects.requireNonNull(directory, "The directory must not be null");
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + "not a directory.");
@@ -26,6 +21,8 @@ public class FileStorage extends AbstractStorage<File> {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " \n" +
                     "it is not possible to write/read information to the directory");
         }
+        Objects.requireNonNull(strategy, "The strategy must not be null");
+        this.strategy = strategy;
         this.directory = directory;
     }
 
@@ -33,7 +30,7 @@ public class FileStorage extends AbstractStorage<File> {
     protected void saveResume(Resume resume, File file) {
         try {
             if (file.createNewFile()) {
-                doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
+                updateResume(resume, file);
             }
         } catch (IOException e) {
             throw new StorageException("Unable to create file", file.getName(), e);
@@ -41,11 +38,11 @@ public class FileStorage extends AbstractStorage<File> {
     }
 
     protected void doWrite(Resume resume, OutputStream os) throws IOException {
-        strategy.getRealization().doWrite(resume, os);
+        strategy.doWrite(resume, os);
     }
 
     protected Resume doRead(InputStream is) throws IOException {
-        return strategy.getRealization().doRead(is);
+        return strategy.doRead(is);
     }
 
     @Override
@@ -85,36 +82,33 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> getAll() {
-        File[] list = directory.listFiles();
-        if (list != null) {
-            List<Resume> listResume = new ArrayList<>();
-            for (File file : list) {
-                listResume.add(getResume(file));
-            }
-            return listResume;
+        List<Resume> listResume = new ArrayList<>();
+        File[] list = createFileList();
+        for (File file : list) {
+            listResume.add(getResume(file));
         }
-        throw new StorageException("File reading error", (directory).getName());
+        return listResume;
     }
 
     @Override
     public void clear() {
-        File[] list = directory.listFiles();
-        if (list != null) {
-            for (File file : list) {
-                if (!file.delete()) {
-                    throw new StorageException("File not deleted", file.getName());
-                }
-            }
+        File[] list = createFileList();
+        for (File file : list) {
+            deleteResume(file);
         }
     }
 
     @Override
     public int size() {
+        return createFileList().length;
+    }
+
+    private File[] createFileList() {
         File[] list = directory.listFiles();
         if (list == null) {
             throw new StorageException("\n" +
                     "Error when requesting files in a directory", directory.getName());
         }
-        return list.length;
+        return list;
     }
 }
