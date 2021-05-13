@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
@@ -37,18 +38,10 @@ public class PathStorage extends AbstractStorage<Path> {
         }
     }
 
-    protected void doWrite(Resume resume, OutputStream os) throws IOException {
-        strategy.doWrite(resume, os);
-    }
-
-    protected Resume doRead(InputStream is) throws IOException {
-        return strategy.doRead(is);
-    }
-
     @Override
     protected void updateResume(Resume resume, Path file) {
         try {
-            doWrite(resume, new BufferedOutputStream(Files.newOutputStream(file)));
+            strategy.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("I/O error", file.toString(), e);
         }
@@ -57,7 +50,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume getResume(Path file) {
         try {
-            return doRead(new BufferedInputStream(Files.newInputStream(file)));
+            return strategy.doRead(new BufferedInputStream(Files.newInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("File reading error", file.toString());
         }
@@ -84,29 +77,24 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected List<Resume> getAll() {
-        try {
-            return Files.list(directory).map(this::getResume).collect(Collectors.toList());
-        } catch (IOException e) {
-            throw new StorageException("Path not added", null);
-        }
+        return createPathList().map(this::getResume).collect(Collectors.toList());
     }
 
     @Override
     public void clear() {
-        try {
-            Files.list(directory).forEach(this::deleteResume);
-        } catch (IOException e) {
-            throw new StorageException("Path not deleted", null);
-        }
+        createPathList().forEach(this::deleteResume);
     }
 
     @Override
     public int size() {
+        return (int) createPathList().count();
+    }
+
+    private Stream<Path> createPathList() {
         try {
-            return (int) Files.list(directory).count();
+            return Files.list(directory);
         } catch (IOException e) {
-            throw new StorageException("\n" +
-                    "Error when requesting files in a directory", directory.toString());
+            throw new StorageException("Error when requesting files in a directory", directory.toString());
         }
     }
 }
