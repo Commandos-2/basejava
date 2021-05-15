@@ -37,18 +37,10 @@ public class FileStorage extends AbstractStorage<File> {
         }
     }
 
-    protected void doWrite(Resume resume, OutputStream os) throws IOException {
-        strategy.doWrite(resume, os);
-    }
-
-    protected Resume doRead(InputStream is) throws IOException {
-        return strategy.doRead(is);
-    }
-
     @Override
     protected void updateResume(Resume resume, File file) {
         try {
-            doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
+            strategy.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("I/O error", file.getName(), e);
         }
@@ -57,7 +49,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     protected Resume getResume(File file) {
         try {
-            return doRead(new BufferedInputStream(new FileInputStream(file)));
+            return strategy.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("File reading error", file.getName());
         }
@@ -83,8 +75,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     protected List<Resume> getAll() {
         List<Resume> listResume = new ArrayList<>();
-        File[] list = createFileList();
-        for (File file : list) {
+        for (File file : createFileList()) {
             listResume.add(getResume(file));
         }
         return listResume;
@@ -92,8 +83,7 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        File[] list = createFileList();
-        for (File file : list) {
+        for (File file : createFileList()) {
             deleteResume(file);
         }
     }
