@@ -2,6 +2,7 @@ package com.resume.webapp.storage;
 
 import com.resume.webapp.exception.StorageException;
 import com.resume.webapp.model.Resume;
+import com.resume.webapp.storage.strategy.Strategy;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -61,7 +62,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             Files.delete(file);
         } catch (IOException e) {
-            throw new StorageException("File not deleted", file.toString());
+            throw new StorageException("File not deleted", file.toString(),e);
         }
     }
 

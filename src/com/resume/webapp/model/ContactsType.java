@@ -16,8 +16,6 @@ public enum ContactsType {
 
     @Override
     public String toString() {
-        return "TypeContacts{" +
-                "title='" + title + '\'' +
-                '}';
+        return title;
     }
 }

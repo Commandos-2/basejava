@@ -6,7 +6,10 @@ import java.util.Objects;
 
 public class TextListSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
-    private final List<String> items;
+    private List<String> items;
+
+    public TextListSection() {
+    }
 
     public TextListSection(String... items) {
         this(Arrays.asList(items));
@@ -19,6 +22,10 @@ public class TextListSection extends AbstractSection {
 
     public List<String> getItems() {
         return items;
+    }
+
+    public String getItem(int i) {
+        return items.get(i);
     }
 
     @Override
@@ -36,6 +43,10 @@ public class TextListSection extends AbstractSection {
 
     @Override
     public String toString() {
-        return items.toString();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < items.size(); i++) {
+            sb.append(items.get(i));
+        }
+        return String.valueOf(sb);
     }
 }

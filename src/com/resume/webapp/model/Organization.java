@@ -1,5 +1,10 @@
 package com.resume.webapp.model;
 
+import com.resume.webapp.util.LocalDateAdapter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -7,11 +12,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final Link homePage;
+    private Link homePage;
     private List<Position> positions = new ArrayList<>();
+
+    public Organization() {
+    }
 
     public Organization(String name, String url, Position... positions) {
         this.homePage = new Link(name, url);
@@ -23,13 +32,20 @@ public class Organization implements Serializable {
         this.positions = positions;
     }
 
+
+    @XmlAccessorType(XmlAccessType.FIELD)
     public static class Position implements Serializable {
         private static final long serialVersionUID = 1L;
         //private final DateTimeFormatter formater = DateTimeFormatter.ofPattern("MM.yyyy");
-        private final ArrayList<LocalDate> initialDate;
-        private final ArrayList<LocalDate> endDate;
-        private final ArrayList<String> heading;
-        private final ArrayList<String> text;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        private ArrayList<LocalDate> initialDate;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        private ArrayList<LocalDate> endDate;
+        private ArrayList<String> heading;
+        private ArrayList<String> text;
+
+        public Position() {
+        }
 
         public Position(ArrayList<LocalDate> initialDate, ArrayList<LocalDate> endDate, ArrayList<String> heading, ArrayList<String> text) {
             Objects.requireNonNull(initialDate, "initialDate not be null");
@@ -58,20 +74,32 @@ public class Organization implements Serializable {
             return Objects.hash(initialDate, endDate, heading, text);
         }
 
+        public ArrayList<LocalDate> getInitialDate() {
+            return initialDate;
+        }
+
         public String getInitialDate(int i) {
             return initialDate.get(i).toString();
         }
 
-        public ArrayList<LocalDate> getInitialDate() {
-            return initialDate;
+        public ArrayList<LocalDate> getEndDate() {
+            return endDate;
         }
 
         public String getEndDate(int i) {
             return endDate.get(i).toString();
         }
 
+        public ArrayList<String> getHeading() {
+            return heading;
+        }
+
         public String getHeading(int i) {
             return heading.get(i);
+        }
+
+        public ArrayList<String> getText() {
+            return text;
         }
 
         public String getText(int i) {
@@ -99,6 +127,10 @@ public class Organization implements Serializable {
 
     public List<Position> getPositions() {
         return positions;
+    }
+
+    public Position getPosition(int j) {
+        return positions.get(j);
     }
 
     @Override

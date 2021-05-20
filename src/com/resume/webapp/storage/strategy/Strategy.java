@@ -1,4 +1,4 @@
-package com.resume.webapp.storage;
+package com.resume.webapp.storage.strategy;
 
 import com.resume.webapp.model.Resume;
 

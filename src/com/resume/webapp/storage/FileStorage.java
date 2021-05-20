@@ -2,6 +2,7 @@ package com.resume.webapp.storage;
 
 import com.resume.webapp.exception.StorageException;
 import com.resume.webapp.model.Resume;
+import com.resume.webapp.storage.strategy.Strategy;
 
 import java.io.*;
 import java.util.ArrayList;

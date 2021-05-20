@@ -2,7 +2,6 @@ package com.resume.webapp.storage.strategy;
 
 import com.resume.webapp.exception.StorageException;
 import com.resume.webapp.model.Resume;
-import com.resume.webapp.storage.Strategy;
 
 import java.io.*;
 

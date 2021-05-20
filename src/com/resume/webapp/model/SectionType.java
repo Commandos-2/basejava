@@ -8,7 +8,7 @@ public enum SectionType {
     QUALIFICATIONS("Qualifications"),
     EXPERIENCE("Experience"),
     EDUCATION("education");
-    private String title;
+    private final String title;
 
     SectionType(String title) {
         this.title = title;
@@ -20,8 +20,6 @@ public enum SectionType {
 
     @Override
     public String toString() {
-        return "TypeSection{" +
-                "title='" + title + '\'' +
-                '}';
+        return title;
     }
 }

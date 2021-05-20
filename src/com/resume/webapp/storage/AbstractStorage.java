@@ -26,7 +26,7 @@ public abstract class AbstractStorage<SK> implements Storage {
 
     public final Resume get(String uuid) {
         LOG.info("Get " + uuid);
-        return (Resume) getResume(getKeyIfExist(uuid));
+        return getResume(getKeyIfExist(uuid));
     }
 
     public final void delete(String uuid) {
