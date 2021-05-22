@@ -23,38 +23,42 @@ public class DataStreamStrategy implements Strategy {
             dos.writeInt(resume.getSections().size());
             for (Map.Entry<SectionType, AbstractSection> entry : resume.getSections().entrySet()) {
                 SectionType sectionType = entry.getKey();
-                if (sectionType == SectionType.PERSONAL || sectionType == SectionType.OBJECTIVE) {
-                    dos.writeUTF(sectionType.name());
-                    dos.writeUTF(entry.getValue().toString());
-                }
-                if (sectionType == SectionType.ACHIEVEMENT || sectionType == SectionType.QUALIFICATIONS) {
-                    int sizeTextListSection = ((TextListSection) entry.getValue()).getItems().size();
-                    dos.writeUTF(sectionType.name());
-                    dos.writeInt(sizeTextListSection);
-                    for (int i = 0; i < sizeTextListSection; i++) {
-                        dos.writeUTF(((TextListSection) entry.getValue()).getItem(i));
+                switch (sectionType) {
+                    case PERSONAL:
+                    case OBJECTIVE: {
+                        dos.writeUTF(sectionType.name());
+                        dos.writeUTF(entry.getValue().toString());
+                        break;
                     }
-                }
-                if (sectionType == SectionType.EDUCATION || sectionType == SectionType.EXPERIENCE) {
-                    int sizeOrganizationSection = ((OrganizationSection) entry.getValue()).getOrganizations().size();
-                    dos.writeUTF(sectionType.name());
-                    dos.writeInt(sizeOrganizationSection);
-                    for (int i = 0; i < sizeOrganizationSection; i++) {
-                        dos.writeUTF(((OrganizationSection) entry.getValue()).getOrganization(i).getHomePage().getName());
-                        dos.writeUTF(((OrganizationSection) entry.getValue()).getOrganization(i).getHomePage().getUrl());
-                        int sizePositions = ((OrganizationSection) entry.getValue()).getOrganization(i).getPositions().size();
-                        dos.writeInt(sizePositions);
-                        for (int j = 0; j < sizePositions; j++) {
-                            int sizeInitialDate = ((OrganizationSection) entry.getValue()).getOrganization(i).getPosition(j).getInitialDate().size();
-                            dos.writeInt(sizeInitialDate);
-                            for (int k = 0; k < sizeInitialDate; k++) {
-                                dos.writeUTF(((OrganizationSection) entry.getValue()).getOrganization(i).getPosition(j).getInitialDate(k));
-                                dos.writeUTF(((OrganizationSection) entry.getValue()).getOrganization(i).getPosition(j).getEndDate(k));
-                                dos.writeUTF(((OrganizationSection) entry.getValue()).getOrganization(i).getPosition(j).getHeading(k));
-                                dos.writeUTF(((OrganizationSection) entry.getValue()).getOrganization(i).getPosition(j).getText(k));
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS: {
+                        int sizeTextListSection = ((TextListSection) entry.getValue()).getItems().size();
+                        dos.writeUTF(sectionType.name());
+                        dos.writeInt(sizeTextListSection);
+                        for (int i = 0; i < sizeTextListSection; i++) {
+                            dos.writeUTF(((TextListSection) entry.getValue()).getItem(i));
+                        }
+                        break;
+                    }
+                    case EDUCATION:
+                    case EXPERIENCE: {
+                        int sizeOrganizationSection = ((OrganizationSection) entry.getValue()).getOrganizations().size();
+                        dos.writeUTF(sectionType.name());
+                        dos.writeInt(sizeOrganizationSection);
+                        for (Organization organization : ((OrganizationSection) entry.getValue()).getOrganizations()) {
+                            dos.writeUTF(organization.getHomePage().getName());
+                            dos.writeUTF(organization.getHomePage().getUrl());
+                            int sizePositions = organization.getPositions().size();
+                            dos.writeInt(sizePositions);
+                            for (Organization.Position position : organization.getPositions()) {
+                                dos.writeUTF(position.getInitialDate().toString());
+                                dos.writeUTF(position.getEndDate().toString());
+                                dos.writeUTF(position.getHeading());
+                                dos.writeUTF(position.getText());
                             }
                         }
                     }
+                    break;
                 }
             }
         }
@@ -78,42 +82,40 @@ public class DataStreamStrategy implements Strategy {
     }
 
     private AbstractSection readAbstractSection(DataInputStream dis, SectionType sectionType) throws IOException {
-        if (sectionType == SectionType.PERSONAL || sectionType == SectionType.OBJECTIVE) {
-            return new TextSection(dis.readUTF());
-        }
-        if (sectionType == SectionType.ACHIEVEMENT || sectionType == SectionType.QUALIFICATIONS) {
-            int size = dis.readInt();
-            List<String> textListSection = new ArrayList<>();
-            for (int i = 0; i < size; i++) {
-                textListSection.add(dis.readUTF());
+        switch (sectionType) {
+            case PERSONAL:
+            case OBJECTIVE: {
+                return new TextSection(dis.readUTF());
             }
-            return new TextListSection(textListSection);
-        }
-        if (sectionType == SectionType.EDUCATION || sectionType == SectionType.EXPERIENCE) {
-            int sizeOrganizationSection = dis.readInt();
-            List<Organization> listOrganization=new ArrayList<>();
-            for (int i = 0; i < sizeOrganizationSection; i++) {
-                String nameOrganization = dis.readUTF();
-                String url = dis.readUTF();
-                int sizePositions = dis.readInt();
-                List<Organization.Position> listPosition = new ArrayList<>();
-                for (int j = 0; j < sizePositions; j++) {
-                    int sizeInitialDate = dis.readInt();
-                    ArrayList<LocalDate> initialDate = new ArrayList<>();
-                    ArrayList<LocalDate> endDate = new ArrayList<>();
-                    ArrayList<String> heading = new ArrayList<>();
-                    ArrayList<String> text = new ArrayList<>();
-                    for (int k = 0; k < sizeInitialDate; k++) {
-                        initialDate.add(LocalDate.parse(dis.readUTF()));
-                        endDate.add(LocalDate.parse(dis.readUTF()));
-                        heading.add(dis.readUTF());
-                        text.add(dis.readUTF());
-                    }
-                    listPosition.add(new Organization.Position(initialDate, endDate, heading, text));
+            case ACHIEVEMENT:
+            case QUALIFICATIONS: {
+                int size = dis.readInt();
+                List<String> textListSection = new ArrayList<>();
+                for (int i = 0; i < size; i++) {
+                    textListSection.add(dis.readUTF());
                 }
-                listOrganization.add(new Organization(nameOrganization, url, listPosition));
+                return new TextListSection(textListSection);
             }
-            return new OrganizationSection(listOrganization);
+            case EDUCATION:
+            case EXPERIENCE: {
+                int sizeOrganizationSection = dis.readInt();
+                List<Organization> listOrganization = new ArrayList<>();
+                for (int i = 0; i < sizeOrganizationSection; i++) {
+                    String nameOrganization = dis.readUTF();
+                    String url = dis.readUTF();
+                    int sizePositions = dis.readInt();
+                    List<Organization.Position> listPosition = new ArrayList<>();
+                    for (int j = 0; j < sizePositions; j++) {
+                        LocalDate initialDate = LocalDate.parse(dis.readUTF());
+                        LocalDate endDate = LocalDate.parse(dis.readUTF());
+                        String heading = dis.readUTF();
+                        String text = dis.readUTF();
+                        listPosition.add(new Organization.Position(initialDate, endDate, heading, text));
+                    }
+                    listOrganization.add(new Organization(nameOrganization, url, listPosition));
+                }
+                return new OrganizationSection(listOrganization);
+            }
         }
         return null;
     }

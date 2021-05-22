@@ -38,16 +38,16 @@ public class Organization implements Serializable {
         private static final long serialVersionUID = 1L;
         //private final DateTimeFormatter formater = DateTimeFormatter.ofPattern("MM.yyyy");
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
-        private ArrayList<LocalDate> initialDate;
+        private LocalDate initialDate;
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
-        private ArrayList<LocalDate> endDate;
-        private ArrayList<String> heading;
-        private ArrayList<String> text;
+        private LocalDate endDate;
+        private String heading;
+        private String text;
 
         public Position() {
         }
 
-        public Position(ArrayList<LocalDate> initialDate, ArrayList<LocalDate> endDate, ArrayList<String> heading, ArrayList<String> text) {
+        public Position(LocalDate initialDate, LocalDate endDate, String heading, String text) {
             Objects.requireNonNull(initialDate, "initialDate not be null");
             Objects.requireNonNull(endDate, "endDate not be null");
             Objects.requireNonNull(heading, "heading not be null");
@@ -74,36 +74,20 @@ public class Organization implements Serializable {
             return Objects.hash(initialDate, endDate, heading, text);
         }
 
-        public ArrayList<LocalDate> getInitialDate() {
+        public LocalDate getInitialDate() {
             return initialDate;
         }
 
-        public String getInitialDate(int i) {
-            return initialDate.get(i).toString();
-        }
-
-        public ArrayList<LocalDate> getEndDate() {
+        public LocalDate getEndDate() {
             return endDate;
         }
 
-        public String getEndDate(int i) {
-            return endDate.get(i).toString();
-        }
-
-        public ArrayList<String> getHeading() {
+        public String getHeading() {
             return heading;
         }
 
-        public String getHeading(int i) {
-            return heading.get(i);
-        }
-
-        public ArrayList<String> getText() {
+        public String getText() {
             return text;
-        }
-
-        public String getText(int i) {
-            return text.get(i);
         }
     }
 
@@ -136,17 +120,15 @@ public class Organization implements Serializable {
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
+        sb.append(getHomePage().toString()).append("\n");
         for (int i = 0; i < this.getPositions().size(); i++) {
-            sb.append(getHomePage().toString()).append("\n");
-            for (int j = 0; j < this.getPositions().get(i).getInitialDate().size(); j++) {
-                sb.append((
-                        this.getPositions()).get(i).getInitialDate(j)).append("-").append((
-                        this.getPositions()).get(i).getEndDate(j)).append("     ").append((
-                        this.getPositions()).get(i).getHeading(j)).append("\n").append((
-                        this.getPositions()).get(i).getText(j));
-            }
-            sb.append("\n");
+            sb.append((
+                    this.getPositions()).get(i).getInitialDate()).append("-").append((
+                    this.getPositions()).get(i).getEndDate()).append("     ").append((
+                    this.getPositions()).get(i).getHeading()).append("\n").append((
+                    this.getPositions()).get(i).getText());
         }
+        sb.append("\n");
         return String.valueOf(sb);
     }
 }
