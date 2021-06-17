@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Consumer;
 
 import static java.util.Objects.isNull;
 
@@ -35,8 +37,7 @@ public class DataStreamStrategy implements Strategy {
                     case ACHIEVEMENT:
                     case QUALIFICATIONS: {
                         List<String> list = ((TextListSection) entry.getValue()).getItems();
-                        int sizeTextListSection = list.size();
-                        dos.writeInt(sizeTextListSection);
+                        dos.writeInt(list.size());
                         for (String items : list) {
                             dos.writeUTF(items);
                         }
@@ -45,31 +46,32 @@ public class DataStreamStrategy implements Strategy {
                     case EDUCATION:
                     case EXPERIENCE: {
                         List<Organization> organizationSection = ((OrganizationSection) entry.getValue()).getOrganizations();
-                        int sizeOrganizationSection = organizationSection.size();
-                        dos.writeInt(sizeOrganizationSection);
+                        dos.writeInt(organizationSection.size());
                         for (Organization organization : organizationSection) {
                             Link link = organization.getHomePage();
                             dos.writeUTF(link.getName());
                             String linkString = link.getUrl();
-                            if (isNull(linkString)) {
-                                dos.writeUTF("");
-                            } else {
-                                dos.writeUTF(linkString);
-                            }
+                            dos.writeUTF(isNull(linkString) ? "" : linkString);
                             List<Organization.Position> list = organization.getPositions();
-                            int sizePositions = list.size();
-                            dos.writeInt(sizePositions);
-                            for (Organization.Position position : list) {
+                            dos.writeInt(list.size());
+                            writeWithExeption(list, dos, (x) -> {
+                                try {
+                                    dos.writeUTF(x.getInitialDate().toString());
+                                    dos.writeUTF(x.getEndDate().toString());
+                                    dos.writeUTF(x.getHeading());
+                                    String text = x.getText();
+                                    dos.writeUTF(isNull(text) ? "" : text);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                            /*for (Organization.Position position : list) {
                                 dos.writeUTF(position.getInitialDate().toString());
                                 dos.writeUTF(position.getEndDate().toString());
                                 dos.writeUTF(position.getHeading());
                                 String text = position.getText();
-                                if (isNull(text)) {
-                                    dos.writeUTF("");
-                                } else {
-                                    dos.writeUTF(text);
-                                }
-                            }
+                                dos.writeUTF(isNull(text) ? "" : text);
+                            }*/
                         }
                     }
                     break;
@@ -117,9 +119,7 @@ public class DataStreamStrategy implements Strategy {
                 for (int i = 0; i < sizeOrganizationSection; i++) {
                     String nameOrganization = dis.readUTF();
                     String url = dis.readUTF();
-                    if (url.equals("")) {
-                        url = null;
-                    }
+                    url = !url.equals("") ? url : null;
                     int sizePositions = dis.readInt();
                     List<Organization.Position> listPosition = new ArrayList<>();
                     for (int j = 0; j < sizePositions; j++) {
@@ -127,9 +127,7 @@ public class DataStreamStrategy implements Strategy {
                         LocalDate endDate = LocalDate.parse(dis.readUTF());
                         String heading = dis.readUTF();
                         String text = dis.readUTF();
-                        if (text.equals("")) {
-                            text = null;
-                        }
+                        text = !text.equals("") ? text : null;
                         listPosition.add(new Organization.Position(initialDate, endDate, heading, text));
                     }
                     listOrganization.add(new Organization(nameOrganization, url, listPosition));
@@ -138,5 +136,12 @@ public class DataStreamStrategy implements Strategy {
             }
         }
         return null;
+    }
+
+    private void writeWithExeption(List<Organization.Position> list, DataOutputStream dos, Consumer<Organization.Position> action) throws IOException {
+        Objects.requireNonNull(action);
+        for (Organization.Position t : list) {
+            action.accept(t);
+        }
     }
 }
