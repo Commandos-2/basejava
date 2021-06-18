@@ -4,11 +4,7 @@ import com.resume.webapp.model.*;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.Consumer;
+import java.util.*;
 
 import static java.util.Objects.isNull;
 
@@ -46,24 +42,20 @@ public class DataStreamStrategy implements Strategy {
                     case EDUCATION:
                     case EXPERIENCE: {
                         List<Organization> organizationSection = ((OrganizationSection) entry.getValue()).getOrganizations();
-                        dos.writeInt(organizationSection.size());
-                        for (Organization organization : organizationSection) {
-                            Link link = organization.getHomePage();
+                        writeWithExeption(organizationSection, dos, x -> {
+                            Link link = ((Organization) x).getHomePage();
                             dos.writeUTF(link.getName());
                             String linkString = link.getUrl();
                             dos.writeUTF(isNull(linkString) ? "" : linkString);
-                            List<Organization.Position> list = organization.getPositions();
-                            dos.writeInt(list.size());
-                            writeWithExeption(list, dos, (x) -> {
-                                try {
-                                    dos.writeUTF(x.getInitialDate().toString());
-                                    dos.writeUTF(x.getEndDate().toString());
-                                    dos.writeUTF(x.getHeading());
-                                    String text = x.getText();
-                                    dos.writeUTF(isNull(text) ? "" : text);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+                            List<Organization.Position> list = ((Organization) x).getPositions();
+                            writeWithExeption(list, dos, y -> {
+                                dos.writeUTF(((Organization.Position) y).getInitialDate().toString());
+                                dos.writeUTF(((Organization.Position) y).getEndDate().toString());
+                                dos.writeUTF(((Organization.Position) y).getHeading());
+                                String text = ((Organization.Position) y).getText();
+                                dos.writeUTF(isNull(text) ? "" : text);
+
+
                             });
                             /*for (Organization.Position position : list) {
                                 dos.writeUTF(position.getInitialDate().toString());
@@ -72,7 +64,7 @@ public class DataStreamStrategy implements Strategy {
                                 String text = position.getText();
                                 dos.writeUTF(isNull(text) ? "" : text);
                             }*/
-                        }
+                        });
                     }
                     break;
                 }
@@ -138,10 +130,11 @@ public class DataStreamStrategy implements Strategy {
         return null;
     }
 
-    private void writeWithExeption(List<Organization.Position> list, DataOutputStream dos, Consumer<Organization.Position> action) throws IOException {
-        Objects.requireNonNull(action);
-        for (Organization.Position t : list) {
-            action.accept(t);
+    private void writeWithExeption(Collection list, DataOutputStream dos, Writer writer) throws IOException {
+        dos.writeInt(list.size());
+        Objects.requireNonNull(writer);
+        for (Object t : list) {
+            writer.write(t);
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.resume.webapp.storage.strategy;
 
-public interface Writer {
-    void writer(Object t);
+import java.io.IOException;
+
+public interface Writer<T> {
+    void write(T t) throws IOException;
 }
