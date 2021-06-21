@@ -15,24 +15,22 @@ public class DataStreamStrategy implements Strategy {
         try (DataOutputStream dos = new DataOutputStream(os)) {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
-            dos.writeInt(resume.getContacts().size());
-            for (Map.Entry<ContactsType, String> entry : resume.getContacts().entrySet()) {
-                dos.writeUTF(entry.getKey().name());
-                dos.writeUTF(entry.getValue());
-            }
-            dos.writeInt(resume.getSections().size());
-            for (Map.Entry<SectionType, AbstractSection> entry : resume.getSections().entrySet()) {
-                SectionType sectionType = entry.getKey();
+            writeWithExeption(resume.getContacts().entrySet(), dos, x -> {
+                dos.writeUTF(((Map.Entry<ContactsType, String>) x).getKey().name());
+                dos.writeUTF(((Map.Entry<ContactsType, String>) x).getValue());
+            });
+            writeWithExeption(resume.getSections().entrySet(), dos, k -> {
+                SectionType sectionType = ((Map.Entry<SectionType, AbstractSection>) k).getKey();
                 dos.writeUTF(sectionType.name());
                 switch (sectionType) {
                     case PERSONAL:
                     case OBJECTIVE: {
-                        dos.writeUTF(((TextSection) entry.getValue()).getContent());
+                        dos.writeUTF(((TextSection) ((Map.Entry<SectionType, AbstractSection>) k).getValue()).getContent());
                         break;
                     }
                     case ACHIEVEMENT:
                     case QUALIFICATIONS: {
-                        List<String> list = ((TextListSection) entry.getValue()).getItems();
+                        List<String> list = ((TextListSection) ((Map.Entry<SectionType, AbstractSection>) k).getValue()).getItems();
                         dos.writeInt(list.size());
                         for (String items : list) {
                             dos.writeUTF(items);
@@ -41,7 +39,7 @@ public class DataStreamStrategy implements Strategy {
                     }
                     case EDUCATION:
                     case EXPERIENCE: {
-                        List<Organization> organizationSection = ((OrganizationSection) entry.getValue()).getOrganizations();
+                        List<Organization> organizationSection = ((OrganizationSection) ((Map.Entry<SectionType, AbstractSection>) k).getValue()).getOrganizations();
                         writeWithExeption(organizationSection, dos, x -> {
                             Link link = ((Organization) x).getHomePage();
                             dos.writeUTF(link.getName());
@@ -54,8 +52,6 @@ public class DataStreamStrategy implements Strategy {
                                 dos.writeUTF(((Organization.Position) y).getHeading());
                                 String text = ((Organization.Position) y).getText();
                                 dos.writeUTF(isNull(text) ? "" : text);
-
-
                             });
                             /*for (Organization.Position position : list) {
                                 dos.writeUTF(position.getInitialDate().toString());
@@ -68,7 +64,7 @@ public class DataStreamStrategy implements Strategy {
                     }
                     break;
                 }
-            }
+            });
         }
     }
 
