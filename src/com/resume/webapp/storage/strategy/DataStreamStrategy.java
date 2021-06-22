@@ -15,22 +15,22 @@ public class DataStreamStrategy implements Strategy {
         try (DataOutputStream dos = new DataOutputStream(os)) {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
-            writeWithExeption(resume.getContacts().entrySet(), dos, x -> {
-                dos.writeUTF(((Map.Entry<ContactsType, String>) x).getKey().name());
-                dos.writeUTF(((Map.Entry<ContactsType, String>) x).getValue());
+            writeWithException(resume.getContacts().entrySet(), dos, x -> {
+                dos.writeUTF(x.getKey().name());
+                dos.writeUTF(x.getValue());
             });
-            writeWithExeption(resume.getSections().entrySet(), dos, k -> {
-                SectionType sectionType = ((Map.Entry<SectionType, AbstractSection>) k).getKey();
+            writeWithException(resume.getSections().entrySet(), dos, k -> {
+                SectionType sectionType = k.getKey();
                 dos.writeUTF(sectionType.name());
                 switch (sectionType) {
                     case PERSONAL:
                     case OBJECTIVE: {
-                        dos.writeUTF(((TextSection) ((Map.Entry<SectionType, AbstractSection>) k).getValue()).getContent());
+                        dos.writeUTF(((TextSection) k.getValue()).getContent());
                         break;
                     }
                     case ACHIEVEMENT:
                     case QUALIFICATIONS: {
-                        List<String> list = ((TextListSection) ((Map.Entry<SectionType, AbstractSection>) k).getValue()).getItems();
+                        List<String> list = ((TextListSection) k.getValue()).getItems();
                         dos.writeInt(list.size());
                         for (String items : list) {
                             dos.writeUTF(items);
@@ -39,18 +39,18 @@ public class DataStreamStrategy implements Strategy {
                     }
                     case EDUCATION:
                     case EXPERIENCE: {
-                        List<Organization> organizationSection = ((OrganizationSection) ((Map.Entry<SectionType, AbstractSection>) k).getValue()).getOrganizations();
-                        writeWithExeption(organizationSection, dos, x -> {
-                            Link link = ((Organization) x).getHomePage();
+                        List<Organization> organizationSection = ((OrganizationSection) k.getValue()).getOrganizations();
+                        writeWithException(organizationSection, dos, x -> {
+                            Link link = x.getHomePage();
                             dos.writeUTF(link.getName());
                             String linkString = link.getUrl();
                             dos.writeUTF(isNull(linkString) ? "" : linkString);
-                            List<Organization.Position> list = ((Organization) x).getPositions();
-                            writeWithExeption(list, dos, y -> {
-                                dos.writeUTF(((Organization.Position) y).getInitialDate().toString());
-                                dos.writeUTF(((Organization.Position) y).getEndDate().toString());
-                                dos.writeUTF(((Organization.Position) y).getHeading());
-                                String text = ((Organization.Position) y).getText();
+                            List<Organization.Position> list = x.getPositions();
+                            writeWithException(list, dos, y -> {
+                                dos.writeUTF(y.getInitialDate().toString());
+                                dos.writeUTF(y.getEndDate().toString());
+                                dos.writeUTF(y.getHeading());
+                                String text = y.getText();
                                 dos.writeUTF(isNull(text) ? "" : text);
                             });
                             /*for (Organization.Position position : list) {
@@ -108,17 +108,18 @@ public class DataStreamStrategy implements Strategy {
                     String nameOrganization = dis.readUTF();
                     String url = dis.readUTF();
                     url = !url.equals("") ? url : null;
-                    int sizePositions = dis.readInt();
-                    List<Organization.Position> listPosition = new ArrayList<>();
-                    for (int j = 0; j < sizePositions; j++) {
+
+                    // List<Organization.Position> listPosition = new ArrayList<>();
+
+                    listOrganization.add(new Organization(nameOrganization, url, readWithException(new ArrayList<>(), dis, () -> {
                         LocalDate initialDate = LocalDate.parse(dis.readUTF());
                         LocalDate endDate = LocalDate.parse(dis.readUTF());
                         String heading = dis.readUTF();
                         String text = dis.readUTF();
                         text = !text.equals("") ? text : null;
-                        listPosition.add(new Organization.Position(initialDate, endDate, heading, text));
-                    }
-                    listOrganization.add(new Organization(nameOrganization, url, listPosition));
+                        return new Organization.Position(initialDate, endDate, heading, text);
+                        //listPosition.add(new Organization.Position(initialDate, endDate, heading, text));
+                    })));
                 }
                 return new OrganizationSection(listOrganization);
             }
@@ -126,11 +127,20 @@ public class DataStreamStrategy implements Strategy {
         return null;
     }
 
-    private void writeWithExeption(Collection list, DataOutputStream dos, Writer writer) throws IOException {
+    private <T> void writeWithException(Collection<T> list, DataOutputStream dos, Writer<T> writer) throws IOException {
         dos.writeInt(list.size());
         Objects.requireNonNull(writer);
-        for (Object t : list) {
+        for (T t : list) {
             writer.write(t);
         }
+    }
+
+    private <T> Collection<T> readWithException(Collection<T> list, DataInputStream dis, Reader<T> reader) throws IOException {
+        int size = dis.readInt();
+        Objects.requireNonNull(reader);
+        for (int j = 0; j < size; j++) {
+            list.add(reader.read());
+        }
+        return list;
     }
 }
