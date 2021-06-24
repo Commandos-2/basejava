@@ -53,13 +53,6 @@ public class DataStreamStrategy implements Strategy {
                                 String text = y.getText();
                                 dos.writeUTF(isNull(text) ? "" : text);
                             });
-                            /*for (Organization.Position position : list) {
-                                dos.writeUTF(position.getInitialDate().toString());
-                                dos.writeUTF(position.getEndDate().toString());
-                                dos.writeUTF(position.getHeading());
-                                String text = position.getText();
-                                dos.writeUTF(isNull(text) ? "" : text);
-                            }*/
                         });
                     }
                     break;
@@ -72,15 +65,11 @@ public class DataStreamStrategy implements Strategy {
     public Resume doRead(InputStream is) throws IOException {
         try (DataInputStream dis = new DataInputStream(is)) {
             Resume resume = new Resume(dis.readUTF(), dis.readUTF());
-            int size = dis.readInt();
-            for (int i = 0; i < size; i++) {
-                resume.addContact(ContactsType.valueOf(dis.readUTF()), dis.readUTF());
-            }
-            size = dis.readInt();
-            for (int i = 0; i < size; i++) {
+            readWithException(dis, () -> resume.addContact(ContactsType.valueOf(dis.readUTF()), dis.readUTF()));
+            readWithException(dis, () -> {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
                 resume.addSection(sectionType, readAbstractSection(dis, sectionType));
-            }
+            });
             return resume;
         }
     }
@@ -93,35 +82,23 @@ public class DataStreamStrategy implements Strategy {
             }
             case ACHIEVEMENT:
             case QUALIFICATIONS: {
-                int size = dis.readInt();
-                List<String> textListSection = new ArrayList<>();
-                for (int i = 0; i < size; i++) {
-                    textListSection.add(dis.readUTF());
-                }
-                return new TextListSection(textListSection);
+                return new TextListSection(readWithExceptionList(dis, dis::readUTF));
             }
             case EDUCATION:
             case EXPERIENCE: {
-                int sizeOrganizationSection = dis.readInt();
-                List<Organization> listOrganization = new ArrayList<>();
-                for (int i = 0; i < sizeOrganizationSection; i++) {
+                return new OrganizationSection(readWithExceptionList(dis, () -> {
                     String nameOrganization = dis.readUTF();
                     String url = dis.readUTF();
                     url = !url.equals("") ? url : null;
-
-                    // List<Organization.Position> listPosition = new ArrayList<>();
-
-                    listOrganization.add(new Organization(nameOrganization, url, readWithException(new ArrayList<>(), dis, () -> {
+                    return new Organization(nameOrganization, url, readWithExceptionList(dis, () -> {
                         LocalDate initialDate = LocalDate.parse(dis.readUTF());
                         LocalDate endDate = LocalDate.parse(dis.readUTF());
                         String heading = dis.readUTF();
                         String text = dis.readUTF();
                         text = !text.equals("") ? text : null;
                         return new Organization.Position(initialDate, endDate, heading, text);
-                        //listPosition.add(new Organization.Position(initialDate, endDate, heading, text));
-                    })));
-                }
-                return new OrganizationSection(listOrganization);
+                    }));
+                }));
             }
         }
         return null;
@@ -135,12 +112,19 @@ public class DataStreamStrategy implements Strategy {
         }
     }
 
-    private <T> Collection<T> readWithException(Collection<T> list, DataInputStream dis, Reader<T> reader) throws IOException {
+    private <T> List<T> readWithExceptionList(DataInputStream dis, Reader<T> reader) throws IOException {
         int size = dis.readInt();
-        Objects.requireNonNull(reader);
-        for (int j = 0; j < size; j++) {
+        List<T> list = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
             list.add(reader.read());
         }
         return list;
+    }
+
+    private void readWithException(DataInputStream dis, ReaderList reader) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            reader.read();
+        }
     }
 }

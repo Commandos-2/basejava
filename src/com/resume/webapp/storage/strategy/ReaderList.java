@@ -2,6 +2,6 @@ package com.resume.webapp.storage.strategy;
 
 import java.io.IOException;
 
-public interface Reader<T> {
-    T read() throws IOException;;
+public interface ReaderList {
+    void read() throws IOException;
 }
