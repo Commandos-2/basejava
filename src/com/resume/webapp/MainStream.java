@@ -1,9 +1,7 @@
 package com.resume.webapp;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 
@@ -20,24 +18,11 @@ public class MainStream {
     }
 
     private static int minValue(int[] values) {
-        AtomicInteger multiplier = new AtomicInteger(1);
-
-        return Arrays.stream(values).distinct().boxed().sorted(Comparator.reverseOrder()).map((x) -> {
-            int result = x * multiplier.get();
-            multiplier.updateAndGet(v -> v * 10);
-            return result;
-        }).reduce(0, Integer::sum);
+        return Arrays.stream(values).distinct().sorted().reduce(0, (x, y) -> (x + y) * 10) / 10;
     }
-    private static List<Integer> oddOrEven(List<Integer> integers){
-        int sum=0;
-        boolean inc=false;
-        for (Integer var :integers){
-            sum+=var;
-        }
-        if(sum%2==0){
-            inc=true;
-        }
-        boolean finalInc = inc;
-        return integers.stream().filter(x->(((x%2)==0)==finalInc)).collect(Collectors.toList());
+
+    private static List<Integer> oddOrEven(List<Integer> integers) {
+        final int sum = integers.stream().reduce(0, Integer::sum) % 2;
+        return integers.stream().filter(x -> (x % 2) == sum).collect(Collectors.toList());
     }
 }
