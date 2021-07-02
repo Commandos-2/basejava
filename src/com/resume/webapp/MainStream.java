@@ -2,6 +2,7 @@ package com.resume.webapp;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -18,11 +19,11 @@ public class MainStream {
     }
 
     private static int minValue(int[] values) {
-        return Arrays.stream(values).distinct().sorted().reduce(0, (x, y) -> (x + y) * 10) / 10;
+        return Arrays.stream(values).distinct().sorted().reduce(0, (x, y) -> x * 10 + y);
     }
 
     private static List<Integer> oddOrEven(List<Integer> integers) {
-        final int sum = integers.stream().reduce(0, Integer::sum) % 2;
-        return integers.stream().filter(x -> (x % 2) == sum).collect(Collectors.toList());
+        Map<Boolean, List<Integer>> result = integers.stream().collect(Collectors.groupingBy(x -> x % 2 == 0));
+        return result.get(result.get(false).size() % 2 != 0);
     }
 }
