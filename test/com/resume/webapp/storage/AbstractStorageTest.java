@@ -1,5 +1,6 @@
 package com.resume.webapp.storage;
 
+import com.resume.webapp.Config;
 import com.resume.webapp.ResumeTestData;
 import com.resume.webapp.exception.ExistStorageException;
 import com.resume.webapp.exception.NotExistStorageException;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public abstract class AbstractStorageTest {
     protected Storage storage;
-    protected final static File STORAGE_DIR = new File("C:\\projects\\topjava\\basejava\\src\\com\\resume\\webapp\\storageFile");
+    protected final static File STORAGE_DIR = Config.get().getStorageDir();
     protected static final String UUID1 = "uuid1";
     protected static final String UUID2 = "uuid2";
     protected static final String UUID3 = "uuid3";

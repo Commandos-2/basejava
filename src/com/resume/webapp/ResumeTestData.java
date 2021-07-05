@@ -1,14 +1,11 @@
 package com.resume.webapp;
 
-import com.resume.webapp.model.*;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
+import com.resume.webapp.model.Resume;
 
 public class ResumeTestData {
     public static Resume createResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-        resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок" +
+     /*   resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок" +
                 " и корпоративного обучения по Java Web и Enterprise технологиям"));
         resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума," +
                 " сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
@@ -92,7 +89,7 @@ public class ResumeTestData {
         resume.addSection(SectionType.EDUCATION, new OrganizationSection(education));
         resume.addContact(ContactsType.PHONE, "+7(921) 855-0482");
         resume.addContact(ContactsType.EMAIL, "gkislin@yandex.ru");
-        resume.addContact(ContactsType.SKYPE, "grigory.kislin");
+        resume.addContact(ContactsType.SKYPE, "grigory.kislin");*/
         return resume;
     }
 
