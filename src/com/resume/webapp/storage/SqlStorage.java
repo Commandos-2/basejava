@@ -34,12 +34,14 @@ public class SqlStorage implements Storage {
 
     @Override
     public void update(Resume r) {
-        checkExist(this.getConnectionFactory(), r.getUuid());
+        //  checkExist(this.getConnectionFactory(), r.getUuid());
         sqlHelp(this.getConnectionFactory(), "UPDATE resume SET uuid=?,full_name=? WHERE uuid=?;", (x) -> {
             x.setString(1, r.getUuid());
             x.setString(2, r.getFullName());
             x.setString(3, r.getUuid());
-            x.execute();
+            if (x.executeUpdate() == 0) {
+                throw new NotExistStorageException(r.getUuid());
+            }
         });
     }
 
@@ -67,10 +69,12 @@ public class SqlStorage implements Storage {
 
     @Override
     public void delete(String uuid) {
-        checkExist(this.getConnectionFactory(), uuid);
+        //  checkExist(this.getConnectionFactory(), uuid);
         sqlHelp(this.getConnectionFactory(), "DELETE FROM resume WHERE uuid=?", (x) -> {
             x.setString(1, uuid);
-            x.execute();
+            if (x.executeUpdate() == 0) {
+                throw new NotExistStorageException(uuid);
+            }
         });
     }
 
@@ -80,7 +84,7 @@ public class SqlStorage implements Storage {
             ResultSet rs = x.executeQuery();
             List<Resume> list = new ArrayList<>();
             while (rs.next()) {
-                list.add(new Resume(rs.getString("uuid").replaceAll(" ", ""), rs.getString("full_name")));
+                list.add(new Resume(rs.getString("uuid"), rs.getString("full_name")));
             }
             list.sort(RESUME_COMPARATOR);
             return list;
@@ -89,23 +93,8 @@ public class SqlStorage implements Storage {
 
     @Override
     public int size() {
-        return sqlHelp(this.getConnectionFactory(), "SELECT * FROM resume", (x) -> {
-            ResultSet rs = x.executeQuery();
-            int size = 0;
-            while (rs.next()) {
-                size++;
-            }
-            return size;
-        });
-    }
-
-    private static void checkExist(ConnectionFactory connectionFactory, String uuid) {
-        sqlHelp(connectionFactory, "SELECT * FROM resume r WHERE r.uuid=?", (x) -> {
-            x.setString(1, uuid);
-            ResultSet rs = x.executeQuery();
-            if (!rs.next()) {
-                throw new NotExistStorageException(uuid);
-            }
+        return sqlHelp(this.getConnectionFactory(), "SELECT count(*) FROM resume", (x) -> {
+            return x.executeQuery().getInt(1);
         });
     }
 

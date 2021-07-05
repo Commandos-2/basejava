@@ -13,13 +13,15 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.UUID.randomUUID;
+
 public abstract class AbstractStorageTest {
     protected Storage storage;
     protected final static File STORAGE_DIR = Config.get().getStorageDir();
-    protected static final String UUID1 = "uuid1";
-    protected static final String UUID2 = "uuid2";
-    protected static final String UUID3 = "uuid3";
-    protected static final String UUID23 = "uuid23";
+    protected static final String UUID1 = randomUUID().toString();
+    protected static final String UUID2 = randomUUID().toString();
+    protected static final String UUID3 = randomUUID().toString();
+    protected static final String UUID23 = randomUUID().toString();
     protected static final String FULL_NAME1 = "NAME1";
     protected static final String FULL_NAME2 = "NAME2";
     protected static final String FULL_NAME3 = "NAME3";
