@@ -1,8 +1,8 @@
-package com.resume.webapp.storage.strategy;
+package com.resume.webapp.storage.sql;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public interface SqlHelpT<T> {
+public interface SqlExecutor<T> {
     T help(PreparedStatement ps)throws SQLException;
 }

@@ -1,4 +1,4 @@
-package com.resume.webapp.storage.strategy;
+package com.resume.webapp.storage.sql;
 
 import com.resume.webapp.exception.StorageException;
 import com.resume.webapp.sql.ConnectionFactory;
@@ -7,18 +7,25 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class SqlHelper {
-    public static void sqlHelp(ConnectionFactory connectionFactory, String sql, SqlHelp sqlHelp) {
-        try (Connection conn = connectionFactory.getConnection();
+public class SqlExecute {
+    ConnectionFactory connectionFactory;
+
+    public SqlExecute(ConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
+    }
+
+    /*public void sqlHelp(String sql, SqlHelp sqlHelp) {
+        try (Connection conn = this.connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             sqlHelp.help(ps);
+            return null;
         } catch (SQLException e) {
             throw new StorageException(e);
         }
-    }
+    }*/
 
-    public static  <T> T sqlHelp(ConnectionFactory connectionFactory, String sql, SqlHelpT <T> sqlHelp) {
-        try (Connection conn = connectionFactory.getConnection();
+    public  <T> T sqlHelp(String sql, SqlExecutor<T> sqlHelp) {
+        try (Connection conn = this.connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             return sqlHelp.help(ps);
         } catch (SQLException e) {
