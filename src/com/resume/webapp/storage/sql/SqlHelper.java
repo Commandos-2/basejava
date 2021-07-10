@@ -1,8 +1,6 @@
 package com.resume.webapp.storage.sql;
 
-import com.resume.webapp.exception.ExistStorageException;
 import com.resume.webapp.exception.StorageException;
-import com.resume.webapp.sql.ConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,27 +13,28 @@ public class SqlHelper {
         this.connectionFactory = connectionFactory;
     }
 
-    /*public void sqlHelp(String sql, SqlHelp sqlHelp) {
-        try (Connection conn = this.connectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            sqlHelp.help(ps);
-            return null;
-        } catch (SQLException e) {
-            throw new StorageException(e);
-        }
-    }*/
-
-    public  <T> T sqlHelp(String sql, SqlExecutor<T> execut) {
+    public <T> T sqlHelp(String sql, SqlExecutor<T> execut) {
         try (Connection conn = this.connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             return execut.execute(ps);
         } catch (SQLException e) {
-            if (e.getSQLState().equals("23505")) {
-                throw new ExistStorageException(e.toString());
-            }else {
-                throw new StorageException(e);
-            }
+            throw ExceptionUtil.convertException(e);
+        }
+    }
 
+    public <T> T transactionalExecute(SqlTransaction<T> executor) {
+        try (Connection conn = connectionFactory.getConnection()) {
+            try {
+                conn.setAutoCommit(false);
+                T res = executor.execute(conn);
+                conn.commit();
+                return res;
+            } catch (SQLException e) {
+                conn.rollback();
+                throw ExceptionUtil.convertException(e);
+            }
+        } catch (SQLException e) {
+            throw new StorageException(e);
         }
     }
 }

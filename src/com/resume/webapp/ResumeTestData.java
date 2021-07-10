@@ -1,5 +1,6 @@
 package com.resume.webapp;
 
+import com.resume.webapp.model.ContactsType;
 import com.resume.webapp.model.Resume;
 
 public class ResumeTestData {
@@ -86,10 +87,10 @@ public class ResumeTestData {
                 "оптики", null, new Organization.Position(LocalDate.of(2014, 10, 11), LocalDate.of(2014, 10, 11), "Инженер (программист Fortran, C)", null),
                 new Organization.Position(LocalDate.of(2014, 10, 11), LocalDate.of(2014, 10, 11), "6 месяцев обучения цифровым телефонным сетям (Москва)", null)));
         education.add(new Organization("Заочная физико-техническая школа при МФТИ", "1234", new Organization.Position(LocalDate.of(2014, 10, 11),LocalDate.of(2014, 10, 11), "Закончил с отличием", null)));
-        resume.addSection(SectionType.EDUCATION, new OrganizationSection(education));
+        resume.addSection(SectionType.EDUCATION, new OrganizationSection(education));*/
         resume.addContact(ContactsType.PHONE, "+7(921) 855-0482");
         resume.addContact(ContactsType.EMAIL, "gkislin@yandex.ru");
-        resume.addContact(ContactsType.SKYPE, "grigory.kislin");*/
+        resume.addContact(ContactsType.SKYPE, "grigory.kislin");
         return resume;
     }
 

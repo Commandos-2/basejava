@@ -1,4 +1,4 @@
-package com.resume.webapp.sql;
+package com.resume.webapp.storage.sql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
