@@ -90,8 +90,11 @@ public class SqlStorage implements Storage {
             //if (rs.g("resume_uuid") > 0) {
             do {
                 String value = rs.getString("value");
-                ContactsType type = ContactsType.valueOf(rs.getString("type"));
-                r.addContact(type, value);
+                String type=rs.getString("type");
+                if(type!=null) {
+                    ContactsType contactsType = ContactsType.valueOf(type);
+                    r.addContact(contactsType, value);
+                }
             } while (rs.next());
             // }
             return r;
