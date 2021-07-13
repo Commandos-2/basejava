@@ -15,7 +15,7 @@ public class SqlStorage implements Storage {
     public final SqlHelper sqlHelper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
-        sqlHelper   = new SqlHelper(() -> DriverManager.getConnection(dbUrl, dbUser, dbPassword));
+        sqlHelper = new SqlHelper(() -> DriverManager.getConnection(dbUrl, dbUser, dbPassword));
     }
 
     @Override
@@ -41,7 +41,7 @@ public class SqlStorage implements Storage {
                         ps.setString(1, r.getUuid());
                         ps.execute();
                     }
-                    saveContact(conn, r);
+                    saveContacts(conn, r);
                     return null;
                 }
         );
@@ -55,7 +55,7 @@ public class SqlStorage implements Storage {
                         ps.setString(2, r.getFullName());
                         ps.execute();
                     }
-                    saveContact(conn, r);
+                    saveContacts(conn, r);
                     return null;
                 }
         );
@@ -118,7 +118,7 @@ public class SqlStorage implements Storage {
         });
     }
 
-    private static void saveContact(Connection conn, Resume r) throws SQLException {
+    private static void saveContacts(Connection conn, Resume r) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO contact (resume_uuid, type, value) VALUES (?,?,?)")) {
             for (Map.Entry<ContactsType, String> e : r.getContacts().entrySet()) {
                 ps.setString(1, r.getUuid());
@@ -132,8 +132,8 @@ public class SqlStorage implements Storage {
 
     private static void addContact(ResultSet rs, Resume resume) throws SQLException {
         String value = rs.getString("value");
-        ContactsType type = ContactsType.valueOf(rs.getString("type"));
         if (value != null) {
+            ContactsType type = ContactsType.valueOf(rs.getString("type"));
             resume.addContact(type, value);
         }
     }
