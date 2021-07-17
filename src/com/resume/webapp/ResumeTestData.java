@@ -1,12 +1,13 @@
 package com.resume.webapp;
 
-import com.resume.webapp.model.ContactsType;
-import com.resume.webapp.model.Resume;
+import com.resume.webapp.model.*;
+
+import java.util.ArrayList;
 
 public class ResumeTestData {
     public static Resume createResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-     /*   resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок" +
+       resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок" +
                 " и корпоративного обучения по Java Web и Enterprise технологиям"));
         resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума," +
                 " сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
@@ -51,7 +52,7 @@ public class ResumeTestData {
                 " архитектурных шаблонов, UML, функционального программирования");
         qualifications.add("Родной русский, английский \"upper intermediate\"");
         resume.addSection(SectionType.QUALIFICATIONS, new TextListSection(qualifications));
-
+/*
         ArrayList<Organization> experience = new ArrayList<Organization>();
         experience.add(new Organization("Java Online Projects", null, new Organization.Position(LocalDate.of(2014, 10, 11), LocalDate.of(2014, 10, 11), "Автор проекта.",
                 "Создание, организация и проведение Java онлайн проектов и стажировок.")));
