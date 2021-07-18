@@ -21,11 +21,11 @@ public class ResumeServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String uuid = request.getParameter("uuid");
         if (uuid == null) {
-            List<Resume> list=Config.get().getSqlStorage().getAllSorted();
+            List<Resume> list = Config.get().getSqlStorage().getAllSorted();
             StringBuilder sb = new StringBuilder();
             sb.append("<table style=\"width:100%\">\n");
-            for(Resume resume:list){
-                sb.append( "  <tr>\n" +"    <th>" + resume.getUuid() + "</th>\n" +"    <th>" + resume.getFullName() + "</th>\n" +"  </tr>\n");
+            for (Resume resume : list) {
+                sb.append("  <tr>\n" + "    <th>" + resume.getUuid() + "</th>\n" + "    <th>" + resume.getFullName() + "</th>\n" + "  </tr>\n");
             }
             sb.append("</table>");
             response.getWriter().write(sb.toString());

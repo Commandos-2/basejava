@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class Config {
-    protected final static File PROPS = new File("config\\resumes.properties");
+    protected final static File PROPS = new File("c:\\projects\\topjava\\basejava\\config\\resumes.properties");
     private static final Config INSTANSE = new Config();
     private Properties props = new Properties();
     private File StorageDir;
@@ -19,7 +19,7 @@ public class Config {
         return INSTANSE;
     }
 
-    private Config() {
+    private Config(){
         try (InputStream is = new FileInputStream(PROPS)) {
             props.load(is);
             sqlStorage=new SqlStorage(props.getProperty("db.url"),props.getProperty("db.user"),props.getProperty("db.password"));
