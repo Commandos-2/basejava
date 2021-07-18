@@ -2,7 +2,9 @@ package com.resume.webapp.web;
 
 import com.resume.webapp.Config;
 import com.resume.webapp.model.Resume;
+import com.resume.webapp.storage.SqlStorage;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +13,16 @@ import java.io.IOException;
 import java.util.List;
 
 public class ResumeServlet extends HttpServlet {
+    public static SqlStorage sqlStorage;
+
+    public void init(ServletConfig servletConfig) {
+        sqlStorage=Config.get().getSqlStorage();
+        try {
+            super.init(servletConfig);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+    }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
@@ -21,7 +33,7 @@ public class ResumeServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String uuid = request.getParameter("uuid");
         if (uuid == null) {
-            List<Resume> list = Config.get().getSqlStorage().getAllSorted();
+            List<Resume> list = sqlStorage.getAllSorted();
             StringBuilder sb = new StringBuilder();
             sb.append("<table style=\"width:100%\">\n");
             for (Resume resume : list) {

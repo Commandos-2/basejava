@@ -42,12 +42,12 @@ public class SqlStorage implements Storage {
                         ps.setString(1, r.getUuid());
                         ps.execute();
                     }
-                    try (PreparedStatement ps = conn.prepareStatement("DELETE FROM all_text_section WHERE resume_uuid=?")) {
+                    try (PreparedStatement ps = conn.prepareStatement("DELETE FROM section WHERE resume_uuid=?")) {
                         ps.setString(1, r.getUuid());
                         ps.execute();
                     }
                     saveContacts(conn, r);
-                    saveTextSectoins(conn, r);
+                    saveSectoins(conn, r);
                     return null;
                 }
         );
@@ -62,7 +62,7 @@ public class SqlStorage implements Storage {
                         ps.execute();
                     }
                     saveContacts(conn, r);
-                    saveTextSectoins(conn, r);
+                    saveSectoins(conn, r);
                     return null;
                 }
         );
@@ -70,19 +70,28 @@ public class SqlStorage implements Storage {
 
     @Override
     public Resume get(String uuid) {
-        return sqlHelper.sqlHelp("SELECT * FROM resume r LEFT JOIN contact c ON r.uuid = c.resume_uuid LEFT JOIN all_text_section z ON r.uuid = z.resume_uuid WHERE r.uuid=?", (ps) -> {
-            ps.setString(1, uuid);
-            ResultSet rs = ps.executeQuery();
-            if (!rs.next()) {
-                throw new NotExistStorageException(uuid);
-            }
-            Resume r = new Resume(uuid, rs.getString("full_name"));
-            do {
-                addContact(rs, r);
-                addTextSection(rs, r);
-            } while (rs.next());
-            return r;
-        });
+        return sqlHelper.sqlHelp(
+                "SELECT r.full_name," +
+                        "c.type AS type," +
+                        "c.value AS value," +
+                        "z.type AS s_type," +
+                        "z.value AS s_value " +
+                        "FROM resume r " +
+                        "LEFT JOIN contact c ON r.uuid = c.resume_uuid " +
+                        "LEFT JOIN section z ON r.uuid = z.resume_uuid" +
+                        " WHERE r.uuid=?", (ps) -> {
+                    ps.setString(1, uuid);
+                    ResultSet rs = ps.executeQuery();
+                    if (!rs.next()) {
+                        throw new NotExistStorageException(uuid);
+                    }
+                    Resume r = new Resume(uuid, rs.getString("full_name"));
+                    do {
+                        addContact(rs, r);
+                        addSection(rs, r);
+                    } while (rs.next());
+                    return r;
+                });
     }
 
     @Override
@@ -114,11 +123,11 @@ public class SqlStorage implements Storage {
                     addContact(rs, resume);
                 }
             }
-            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM all_text_section")) {
+            try (PreparedStatement ps = conn.prepareStatement("SELECT type AS s_type,value AS s_value,resume_uuid  FROM section")) {
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     Resume resume = map.get(rs.getString("resume_uuid"));
-                    addTextSection(rs, resume);
+                    addSection(rs, resume);
                 }
             }
             return new ArrayList<>(map.values());
@@ -153,10 +162,10 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private static void addTextSection(ResultSet rs, Resume resume) throws SQLException {
-        String text = rs.getString("section_value");
+    private static void addSection(ResultSet rs, Resume resume) throws SQLException {
+        String text = rs.getString("s_value");
         if (text != null) {
-            SectionType sectionType = SectionType.valueOf(rs.getString("section_type"));
+            SectionType sectionType = SectionType.valueOf(rs.getString("s_type"));
             switch (sectionType) {
                 case PERSONAL:
                 case OBJECTIVE: {
@@ -173,8 +182,9 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void saveTextSectoins(Connection conn, Resume r) throws SQLException {
-        try (PreparedStatement ps = conn.prepareStatement("INSERT INTO all_text_section (resume_uuid, section_type, section_value) VALUES (?,?,?)")) {
+
+    private void saveSectoins(Connection conn, Resume r) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement("INSERT INTO section (resume_uuid, type, value) VALUES (?,?,?)")) {
             for (Map.Entry<SectionType, AbstractSection> e : r.getSections().entrySet()) {
                 SectionType sectionType = e.getKey();
                 ps.setString(1, r.getUuid());
@@ -188,11 +198,11 @@ public class SqlStorage implements Storage {
                     case ACHIEVEMENT:
                     case QUALIFICATIONS: {
                         List<String> list = ((TextListSection) e.getValue()).getItems();
-                        StringBuilder sb = new StringBuilder();
+                        StringJoiner joiner = new StringJoiner("\n");
                         for (String items : list) {
-                            sb.append(items + "\n");
+                            joiner.add(items);
                         }
-                        ps.setString(3, sb.toString());
+                        ps.setString(3, joiner.toString());
                         break;
                     }
                 }
