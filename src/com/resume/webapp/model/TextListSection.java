@@ -35,6 +35,15 @@ public class TextListSection extends AbstractSection {
         TextListSection that = (TextListSection) o;
         return items.equals(that.items);
     }
+    @Override
+    public String toHtml() {
+        StringBuilder sb = new StringBuilder();
+        int number=1;
+        for(String item: items){
+            sb.append(number++ +":<dd><textarea name=\"${typeSections.name()}\" cols=\"50\"rows=\"3\">"+item+"</textarea></dd><br/>");
+        }
+        return sb.toString();
+    }
 
     @Override
     public int hashCode() {

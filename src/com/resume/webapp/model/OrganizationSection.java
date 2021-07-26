@@ -38,6 +38,11 @@ public class OrganizationSection extends AbstractSection {
     }
 
     @Override
+    public String toHtml() {
+        return null;
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(organizations);
     }

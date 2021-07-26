@@ -52,8 +52,8 @@ public class ResumeTestData {
                 " архитектурных шаблонов, UML, функционального программирования");
         qualifications.add("Родной русский, английский \"upper intermediate\"");
         resume.addSection(SectionType.QUALIFICATIONS, new TextListSection(qualifications));
-/*
-        ArrayList<Organization> experience = new ArrayList<Organization>();
+
+        /*ArrayList<Organization> experience = new ArrayList<Organization>();
         experience.add(new Organization("Java Online Projects", null, new Organization.Position(LocalDate.of(2014, 10, 11), LocalDate.of(2014, 10, 11), "Автор проекта.",
                 "Создание, организация и проведение Java онлайн проектов и стажировок.")));
         experience.add(new Organization("Wrike", null, new Organization.Position(LocalDate.of(2014, 10, 11), LocalDate.of(2014, 10, 11), "Старший разработчик (backend)", "Проектирование" +

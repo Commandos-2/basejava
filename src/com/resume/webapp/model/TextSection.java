@@ -24,6 +24,12 @@ public class TextSection extends AbstractSection {
     }
 
     @Override
+    public String toHtml() {
+       return  "<dd><input type=\"text\" name=\"${typeSections.name()}\" size=\"300\" value=\""+content+"\"></dd>";
+      //  return "<dd><textarea name=\"${typeSections.name()}\" cols=\"50\"rows=\"3\">"+content+"</textarea></dd>";
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

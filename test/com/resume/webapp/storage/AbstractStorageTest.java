@@ -26,10 +26,10 @@ public abstract class AbstractStorageTest {
     protected static final String FULL_NAME2 = "NAME2";
     protected static final String FULL_NAME3 = "NAME3";
     protected static final String FULL_NAME23 = "NAME23";
-    protected static final Resume resume1 = ResumeTestData.createResume(UUID1, FULL_NAME1);
-    protected static final Resume resume2 = ResumeTestData.createResume(UUID2, FULL_NAME2);
-    protected static final Resume resume3 = ResumeTestData.createResume(UUID23, FULL_NAME23);
-    protected static final Resume resume4 = ResumeTestData.createResume(UUID3, FULL_NAME3);
+    public static final Resume resume1 = ResumeTestData.createResume(UUID1, FULL_NAME1);
+    public static final Resume resume2 = ResumeTestData.createResume(UUID2, FULL_NAME2);
+    public static final Resume resume3 = ResumeTestData.createResume(UUID23, FULL_NAME23);
+    public static final Resume resume4 = ResumeTestData.createResume(UUID3, FULL_NAME3);
 
 
     public AbstractStorageTest(Storage storage) {

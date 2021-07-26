@@ -7,7 +7,7 @@ public enum SectionType {
     ACHIEVEMENT("Achievement"),
     QUALIFICATIONS("Qualifications"),
     EXPERIENCE("Experience"),
-    EDUCATION("education");
+    EDUCATION("Education");
     private final String title;
 
     SectionType(String title) {
