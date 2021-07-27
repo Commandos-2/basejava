@@ -40,7 +40,7 @@ public class TextListSection extends AbstractSection {
         StringBuilder sb = new StringBuilder();
         int number=1;
         for(String item: items){
-            sb.append(number++ +":<dd><textarea name=\"${typeSections.name()}\" cols=\"50\"rows=\"3\">"+item+"</textarea></dd><br/>");
+            sb.append(number++ +":<dd><textarea name=\"TextListSection\" cols=\"50\"rows=\"3\">"+item+"</textarea></dd><br/>");
         }
         return sb.toString();
     }

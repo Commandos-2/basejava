@@ -48,7 +48,7 @@ public class ResumeServlet extends HttpServlet {
             switch (sectionType) {
                 case PERSONAL:
                 case OBJECTIVE: {
-                    String value = request.getParameter(sectionType.name());
+                    String value = request.getParameter("TextSection");
                     if (value != null && value.trim().length() != 0) {
                         resume.addSection(sectionType, new TextSection(value));
                     } else {
@@ -59,7 +59,7 @@ public class ResumeServlet extends HttpServlet {
 
                 case ACHIEVEMENT:
                 case QUALIFICATIONS: {
-                    String[] value = request.getParameterValues(sectionType.name());
+                    String[] value = request.getParameterValues("TextListSection");
                     List<String> list = new ArrayList<>();
                     for (int i = 0; i < value.length; i++) {
                         if (value[i] != null && value[i].trim().length() != 0) {
