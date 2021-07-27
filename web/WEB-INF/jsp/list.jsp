@@ -32,7 +32,7 @@
         </c:forEach>
     </table>
     <h2>Всего резюме в базе: ${size} </h2>
-    <h2><a href="resume?action=save">Создать новое резюме</a></h2>
+    <h2><a href="resume?action=edit">Создать новое резюме</a></h2>
     <h2><a href="resume?action=clear">Удалить все резюме</a></h2>
 </section>
 <jsp:include page="fragments/footer.jsp"/>

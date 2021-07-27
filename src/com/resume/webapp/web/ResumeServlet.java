@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ResumeServlet extends HttpServlet {
@@ -29,8 +30,11 @@ public class ResumeServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
         String fullName = request.getParameter("fullName");
+        if (fullName == null && uuid != null) {
+            storage.delete(uuid);
+        }
         Resume resume;
-        if (uuid == null) {
+        if (uuid == null||uuid =="") {
             resume = new Resume(fullName);
         } else {
             resume = storage.get(uuid);
@@ -48,7 +52,7 @@ public class ResumeServlet extends HttpServlet {
             switch (sectionType) {
                 case PERSONAL:
                 case OBJECTIVE: {
-                    String value = request.getParameter("TextSection");
+                    String value = request.getParameter(sectionType.name());
                     if (value != null && value.trim().length() != 0) {
                         resume.addSection(sectionType, new TextSection(value));
                     } else {
@@ -59,20 +63,18 @@ public class ResumeServlet extends HttpServlet {
 
                 case ACHIEVEMENT:
                 case QUALIFICATIONS: {
-                    String[] value = request.getParameterValues("TextListSection");
-                    List<String> list = new ArrayList<>();
-                    for (int i = 0; i < value.length; i++) {
-                        if (value[i] != null && value[i].trim().length() != 0) {
-                            list.add(value[i]);
-                        }
+                    String value = request.getParameter(sectionType.name());
+                    if (value != null && value.trim().length() != 0) {
+                        List<String> list = new ArrayList<>(Arrays.asList(value.split("\n")));
+                        resume.addSection(sectionType, new TextListSection(list));
+                    } else {
+                        resume.getSections().remove(sectionType);
                     }
-                    resume.addSection(sectionType, new TextListSection(list));
                     break;
                 }
-
             }
         }
-        if (uuid == null) {
+        if (uuid == null||uuid=="") {
             storage.save(resume);
         } else {
             storage.update(resume);
@@ -102,17 +104,21 @@ public class ResumeServlet extends HttpServlet {
                 storage.clear();
                 response.sendRedirect("resume");
                 return;
-            case "save":
-                request.getRequestDispatcher("/WEB-INF/jsp/save.jsp").forward(request, response);
-                return;
             case "view":
             case "edit":
-                resume = storage.get(uuid);
+                if (uuid != null) {
+                    resume = storage.get(uuid);
+                } else {
+                    resume = new Resume("","");
+                }
+
                 break;
             default:
                 throw new IllegalStateException("Action " + action + " is illegal");
         }
         request.setAttribute("resume", resume);
-        request.getRequestDispatcher(("view".equals(action) ? "/WEB-INF/jsp/view.jsp" : "/WEB-INF/jsp/edit.jsp")).forward(request, response);
+        request.getRequestDispatcher(("view".
+                equals(action) ? "/WEB-INF/jsp/view.jsp" : "/WEB-INF/jsp/edit.jsp")).
+                forward(request, response);
     }
 }

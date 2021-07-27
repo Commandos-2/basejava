@@ -19,7 +19,7 @@
         <input type="hidden" name="uuid" value="${resume.uuid}">
         <dl>
             <dt>Имя:</dt>
-            <dd><input type="text" name="fullName" size="50" value="${resume.fullName}"></dd>
+            <dd><input required type="text" name="fullName" size="50" value="${resume.fullName}"></dd>
         </dl>
         <h3>Контакты</h3>
         <c:forEach items="<%=ContactsType.values()%>" var="type">
@@ -31,14 +31,25 @@
         <h3>Секции</h3>
         <c:forEach items="<%=SectionType.values()%>" var="typeSections">
             <dl>
-                <dt>${typeSections.title}</dt><br/>
-                    ${resume.getSections(typeSections).toHtml()}
-
+                <dt>${typeSections.title}</dt>
+                <br/>
+                <c:choose>
+                    <c:when test="${typeSections.name() == SectionType.PERSONAL||typeSections.name()== SectionType.OBJECTIVE }">
+                        <dd><input type="text" name="${typeSections.name()}" size="100"
+                                   value="${resume.getSections(typeSections).toHtml()}"></dd>
+                    </c:when>
+                    <c:when test="${typeSections.name() == SectionType.ACHIEVEMENT||typeSections.name() == SectionType.QUALIFICATIONS }">
+                        <dd><textarea name="${typeSections.name()}" cols="100"
+                                      rows="10">${resume.getSections(typeSections).toHtml()}</textarea></dd>
+                        <br/>
+                    </c:when>
+                </c:choose>
             </dl>
         </c:forEach>
         <hr/>
         <button type="submit">Сохранить</button>
-        <button onclick="window.history.back()">Отменить</button>
+        <button type="reset">Отменить изменения</button>
+        <button type="reset" onclick="window.history.back()">Назад</button>
     </form>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
