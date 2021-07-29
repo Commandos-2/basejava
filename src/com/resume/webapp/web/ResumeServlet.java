@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.resume.webapp.util.DataAdapter.convertStringToLocalDate;
+
 public class ResumeServlet extends HttpServlet {
     private Storage storage;
 
@@ -34,7 +36,7 @@ public class ResumeServlet extends HttpServlet {
             storage.delete(uuid);
         }
         Resume resume;
-        if (uuid == null||uuid =="") {
+        if (uuid == null || uuid == "") {
             resume = new Resume(fullName);
         } else {
             resume = storage.get(uuid);
@@ -72,9 +74,35 @@ public class ResumeServlet extends HttpServlet {
                     }
                     break;
                 }
+                case EXPERIENCE:
+                case EDUCATION: {
+                    String[] name = request.getParameterValues(sectionType.name());
+                    String[] url = request.getParameterValues(sectionType.name() + "url");
+                    String[] count = request.getParameterValues(sectionType.name() + "count");
+
+                    List<Organization> listOrg = new ArrayList<>();
+
+                    for (int j = 0; j < name.length; j++) {
+                        if (name[j] != null && name[j].trim().length() != 0) {
+                            List<Organization.Position> list = new ArrayList<>();
+                            String[] heading = request.getParameterValues(sectionType.name() + count[j] + "heading");
+                            String[] value = request.getParameterValues(sectionType.name() + count[j] + "value");
+                            String[] initialDate = request.getParameterValues(sectionType.name() + count[j] + "initial_date");
+                            String[] endDate = request.getParameterValues(sectionType.name() + count[j] + "end_date");
+                            if (heading != null) {
+                                for (int i = 0; i < heading.length; i++) {
+                                    list.add(new Organization.Position(convertStringToLocalDate(initialDate[i]), convertStringToLocalDate(endDate[i]), heading[i], value[i]));
+                                }
+                            }
+                            listOrg.add(new Organization(name[j], url[j], list));
+                        }
+                    }
+                    resume.addSection(sectionType, new OrganizationSection(listOrg));
+                    break;
+                }
             }
         }
-        if (uuid == null||uuid=="") {
+        if (uuid == null || uuid == "") {
             storage.save(resume);
         } else {
             storage.update(resume);
@@ -109,7 +137,7 @@ public class ResumeServlet extends HttpServlet {
                 if (uuid != null) {
                     resume = storage.get(uuid);
                 } else {
-                    resume = new Resume("","");
+                    resume = new Resume("", "");
                 }
 
                 break;

@@ -6,7 +6,11 @@ import com.resume.webapp.storage.sql.SqlHelper;
 import com.resume.webapp.util.JsonParser;
 
 import java.sql.*;
+import java.sql.Date;
 import java.util.*;
+
+import static com.resume.webapp.model.SectionType.EDUCATION;
+import static com.resume.webapp.model.SectionType.EXPERIENCE;
 
 public class SqlStorage implements Storage {
     public final SqlHelper sqlHelper;
@@ -41,8 +45,10 @@ public class SqlStorage implements Storage {
                     }
                     delete(conn, r, "contact");
                     delete(conn, r, "section");
+                    delete(conn, r, "organization_section");
                     saveContacts(conn, r);
-                    saveSectoins(conn, r);
+                    saveSections(conn, r);
+                    saveOrganizationSections(conn, r);
                     return null;
                 }
         );
@@ -57,7 +63,8 @@ public class SqlStorage implements Storage {
                         ps.execute();
                     }
                     saveContacts(conn, r);
-                    saveSectoins(conn, r);
+                    saveSections(conn, r);
+                    saveOrganizationSections(conn, r);
                     return null;
                 }
         );
@@ -87,6 +94,13 @@ public class SqlStorage implements Storage {
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     addSection(rs, resume);
+                }
+            }
+            try (PreparedStatement ps = conn.prepareStatement("SELECT *  FROM organization_section WHERE resume_uuid=?")) {
+                ps.setString(1, uuid);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    addOrganizationSection(rs, resume, conn);
                 }
             }
             return resume;
@@ -129,6 +143,13 @@ public class SqlStorage implements Storage {
                     addSection(rs, resume);
                 }
             }
+            try (PreparedStatement ps = conn.prepareStatement("SELECT *  FROM organization_section ")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    Resume resume = map.get(rs.getString("resume_uuid"));
+                    addOrganizationSection(rs, resume, conn);
+                }
+            }
             return new ArrayList<>(map.values());
         });
     }
@@ -169,17 +190,69 @@ public class SqlStorage implements Storage {
         }
     }
 
+    private void addOrganizationSection(ResultSet rs, Resume resume, Connection conn) throws SQLException {
+        String name = rs.getString("name");
+        if (name != null) {
+            List<Organization.Position> list = new ArrayList<>();
+            try (PreparedStatement ps = conn.prepareStatement("SELECT *  FROM position WHERE id_organization_section=?")) {
+                ps.setString(1, rs.getString("id"));
+                ResultSet rs2 = ps.executeQuery();
+                while (rs2.next()) {
+                    list.add(new Organization.Position(rs2.getDate("initial_date").toLocalDate(), rs2.getDate("end_date").toLocalDate(), rs2.getString("heading"), rs2.getString("value")));
+                }
+            }
+            Organization organization = new Organization(name, rs.getString("url"), list);
+            SectionType sectionType = SectionType.valueOf(rs.getString("type"));
+            OrganizationSection organizationSection = (resume.getSections().containsKey(sectionType)) ? (OrganizationSection) resume.getSections(sectionType) : new OrganizationSection(new ArrayList<Organization>());
+            organizationSection.getOrganizations().add(organization);
+            resume.addSection(sectionType, organizationSection);
+        }
+    }
 
-    private void saveSectoins(Connection conn, Resume r) throws SQLException {
+    private void saveSections(Connection conn, Resume r) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO section (resume_uuid, type, value) VALUES (?,?,?)")) {
             for (Map.Entry<SectionType, AbstractSection> e : r.getSections().entrySet()) {
                 SectionType sectionType = e.getKey();
+                if (sectionType == EXPERIENCE || sectionType == EDUCATION) {
+                    continue;
+                }
                 ps.setString(1, r.getUuid());
                 ps.setString(2, sectionType.name());
                 ps.setString(3, JsonParser.write(e.getValue(), AbstractSection.class));
                 ps.addBatch();
             }
             ps.executeBatch();
+        }
+    }
+
+    private void saveOrganizationSections(Connection conn, Resume r) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement("INSERT INTO organization_section (resume_uuid, type, name, url, id) VALUES (?,?,?,?,?)")) {
+            for (Map.Entry<SectionType, AbstractSection> e : r.getSections().entrySet()) {
+                SectionType sectionType = e.getKey();
+                if (sectionType == EXPERIENCE || sectionType == EDUCATION) {
+                    for (Organization organization : ((OrganizationSection) e.getValue()).getOrganizations()) {
+                        ps.setString(1, r.getUuid());
+                        ps.setString(2, sectionType.name());
+                        ps.setString(3, organization.getHomePage().getName());
+                        ps.setString(4, organization.getHomePage().getUrl());
+                        String id = UUID.randomUUID().toString();
+                        ps.setString(5, id);
+                        ps.addBatch();
+                        ps.executeBatch();
+                        try (PreparedStatement ps2 = conn.prepareStatement("INSERT INTO position (id_organization_section, heading, value,initial_date,end_date) VALUES (?,?,?,?,?)")) {
+                            for (Organization.Position position : organization.getPositions()) {
+                                ps2.setString(1, id);
+                                ps2.setString(2, position.getHeading());
+                                ps2.setString(3, position.getText());
+                                ps2.setDate(4, Date.valueOf(position.getInitialDate()));
+                                ps2.setDate(5, Date.valueOf(position.getEndDate()));
+                                ps2.addBatch();
+                            }
+                            ps2.executeBatch();
+                        }
+                    }
+                }
+            }
         }
     }
 

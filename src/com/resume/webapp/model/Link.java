@@ -28,6 +28,10 @@ public class Link implements Serializable {
         return url;
     }
 
+    public String getUrlHtml() {
+        return "<a href='mailto:" + url + "'>" + url + "</a>";
+    }
+
     @Override
     public String toString() {
         if (url != null) {

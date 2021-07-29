@@ -13,6 +13,9 @@
 <body>
 <jsp:include page="fragments/header.jsp"/>
 <section>
+    <h3>Всего резюме в базе: ${size} </h3>
+    <h3><a href="resume?action=edit">Создать новое резюме</a></h3>
+    <h3><a href="resume?action=clear">Удалить все резюме</a></h3>
     <table border="1" cellpadding="8" cellspacing="0">
         <tr>
             <th>Имя</th>
@@ -31,9 +34,7 @@
         </tr>
         </c:forEach>
     </table>
-    <h2>Всего резюме в базе: ${size} </h2>
-    <h2><a href="resume?action=edit">Создать новое резюме</a></h2>
-    <h2><a href="resume?action=clear">Удалить все резюме</a></h2>
+
 </section>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
