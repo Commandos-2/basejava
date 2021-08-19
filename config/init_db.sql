@@ -46,5 +46,38 @@ create table section
 
 alter table section owner to postgres;
 
+create table if not exists organization_section
+(
+	id char(36) not null
+		constraint organization_section_pk
+			primary key,
+	resume_uuid text not null
+		constraint organization_section_resume_uuid_fk
+			references resume
+				on delete cascade,
+	name text not null,
+	url text,
+	type text not null
+);
+
+alter table organization_section owner to postgres;
+
+create unique index if not exists organization_section_id_uindex
+	on organization_section (id);
+
+create table if not exists position
+(
+	id_organization_section char(36)
+		constraint position_organization_section_id_fk
+			references organization_section
+				on delete cascade,
+	heading text,
+	value text,
+	initial_date date not null,
+	end_date date
+);
+
+alter table position owner to postgres;
+
 
 
