@@ -13,7 +13,7 @@
 <body>
 <jsp:include page="fragments/header.jsp"/>
 <section>
-    <h3>Всего резюме в базе: ${size} </h3>
+    <h3>Всего резюме: ${size} </h3>
     <h3><a href="resume?action=edit">Создать новое резюме</a></h3>
     <h3><a href="resume?action=clear">Удалить все резюме</a></h3>
     <table border="1" cellpadding="8" cellspacing="0">
@@ -29,8 +29,8 @@
         <tr>
             <td><a href="resume?uuid=${resume.getUuid()}&action=view">${resume.getFullName()}</a></td>
             <td><%=ContactsType.EMAIL.toHtml(resume.getContacts(ContactsType.EMAIL))%></td>
-            <td ><a href="resume?uuid=${resume.getUuid()}&action=delete"><img src="img/delete.png"></a></td>
-            <td><a href="resume?uuid=${resume.getUuid()}&action=edit"><img src="img/pencil.png"></a></td>
+            <td width="100" height="40" align="center" ><a href="resume?uuid=${resume.getUuid()}&action=delete"><img  src="img/delete.png"></a></td>
+            <td width="100" height="40" align="center"><a href="resume?uuid=${resume.getUuid()}&action=edit"><img  src="img/pencil.png"></a></td>
         </tr>
         </c:forEach>
     </table>

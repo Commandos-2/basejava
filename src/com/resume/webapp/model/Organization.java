@@ -15,7 +15,7 @@ import java.util.Objects;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
     private static final long serialVersionUID = 1L;
-
+    public static final Organization EMPTY = new Organization("", "", Position.EMPTY);
     private Link homePage;
     private List<Position> positions = new ArrayList<>();
 
@@ -32,11 +32,17 @@ public class Organization implements Serializable {
         this.positions = positions;
     }
 
+    public Organization(Link link, List<Position> positions) {
+        this.homePage = link;
+        this.positions = positions;
+    }
+
 
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Position implements Serializable {
         private static final long serialVersionUID = 1L;
         //private final DateTimeFormatter formater = DateTimeFormatter.ofPattern("MM.yyyy");
+        public static final Position EMPTY = new Position();
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate initialDate;
         @XmlJavaTypeAdapter(LocalDateAdapter.class)

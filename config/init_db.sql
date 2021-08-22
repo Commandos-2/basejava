@@ -46,7 +46,7 @@ create table section
 
 alter table section owner to postgres;
 
-create table if not exists organization_section
+/*create table if not exists organization_section
 (
 	id char(36) not null
 		constraint organization_section_pk
@@ -78,6 +78,6 @@ create table if not exists position
 );
 
 alter table position owner to postgres;
-
+*/
 
 

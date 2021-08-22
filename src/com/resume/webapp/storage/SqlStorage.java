@@ -45,10 +45,10 @@ public class SqlStorage implements Storage {
                     }
                     delete(conn, r, "contact");
                     delete(conn, r, "section");
-                    delete(conn, r, "organization_section");
+                  //  delete(conn, r, "organization_section");
                     saveContacts(conn, r);
                     saveSections(conn, r);
-                    saveOrganizationSections(conn, r);
+              //      saveOrganizationSections(conn, r);
                     return null;
                 }
         );
@@ -64,7 +64,7 @@ public class SqlStorage implements Storage {
                     }
                     saveContacts(conn, r);
                     saveSections(conn, r);
-                    saveOrganizationSections(conn, r);
+                //    saveOrganizationSections(conn, r);
                     return null;
                 }
         );
@@ -96,13 +96,13 @@ public class SqlStorage implements Storage {
                     addSection(rs, resume);
                 }
             }
-            try (PreparedStatement ps = conn.prepareStatement("SELECT *  FROM organization_section WHERE resume_uuid=?")) {
+          /*  try (PreparedStatement ps = conn.prepareStatement("SELECT *  FROM organization_section WHERE resume_uuid=?")) {
                 ps.setString(1, uuid);
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     addOrganizationSection(rs, resume, conn);
                 }
-            }
+            }*/
             return resume;
         });
     }
@@ -143,13 +143,13 @@ public class SqlStorage implements Storage {
                     addSection(rs, resume);
                 }
             }
-            try (PreparedStatement ps = conn.prepareStatement("SELECT *  FROM organization_section ")) {
+           /* try (PreparedStatement ps = conn.prepareStatement("SELECT *  FROM organization_section ")) {
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     Resume resume = map.get(rs.getString("resume_uuid"));
                     addOrganizationSection(rs, resume, conn);
                 }
-            }
+            }*/
             return new ArrayList<>(map.values());
         });
     }
@@ -213,9 +213,6 @@ public class SqlStorage implements Storage {
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO section (resume_uuid, type, value) VALUES (?,?,?)")) {
             for (Map.Entry<SectionType, AbstractSection> e : r.getSections().entrySet()) {
                 SectionType sectionType = e.getKey();
-                if (sectionType == EXPERIENCE || sectionType == EDUCATION) {
-                    continue;
-                }
                 ps.setString(1, r.getUuid());
                 ps.setString(2, sectionType.name());
                 ps.setString(3, JsonParser.write(e.getValue(), AbstractSection.class));

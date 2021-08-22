@@ -7,6 +7,8 @@ import java.util.Objects;
 public class OrganizationSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
 
+    public static final Organization EMPTY = new Organization("", "", Organization.Position.EMPTY);
+
     private List<Organization> organizations;
 
     public OrganizationSection() {
